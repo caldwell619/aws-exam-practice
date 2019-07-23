@@ -1,0 +1,111 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "Exam-Tips"
+	},
+	"host": "fr6pnyhq8e.execute-api.us-east-1.amazonaws.com",
+	"basePath": "/dev",
+	"schemes": ["https"],
+	"paths": {
+		"/test": {
+			"get": {
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TestLambda.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				}
+			},
+			"options": {
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"responses": {
+						"default": {
+							"statusCode": "200",
+							"responseParameters": {
+								"method.response.header.Access-Control-Allow-Methods": "'*'",
+								"method.response.header.Access-Control-Allow-Headers": "'*'",
+								"method.response.header.Access-Control-Allow-Origin": "'*'"
+							}
+						}
+					},
+					"passthroughBehavior": "when_no_match",
+					"requestTemplates": {
+						"application/json": "{\n  \"statusCode\" : 200\n}\n"
+					},
+					"type": "mock"
+				}
+			}
+		}
+	},
+	"x-amazon-apigateway-request-validators": {
+		"validateBody": {
+			"validateRequestParameters": false,
+			"validateRequestBody": true
+		}
+	}
+}

@@ -1,0 +1,53 @@
+Transform: "AWS::Serverless-2016-10-31"
+Globals:
+  Api:
+    TracingEnabled: true
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+  Function:
+    Runtime: nodejs10.x
+    Tracing: Active
+Resources:
+  # Lambda
+  LambdaLocalCorsStub:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/options/
+      Handler: index.handler
+      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      FunctionName: cors_handler
+      Timeout: 30
+      Events:
+        ClockInOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref FurryFriendsAPI
+            Path: /{cors+}
+            Method: OPTIONS
+  TestLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/test/
+      Handler: index.handler
+      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Events:
+        TestSetup:
+          Type: Api
+          Properties:
+            RestApiId: !Ref FurryFriendsAPI
+            Path: /test
+            Method: get
+
+  # API
+  FurryFriendsAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: Exam-Tips
+      StageName: dev
+      DefinitionBody:
+        "Fn::Transform":
+          Name: "AWS::Include"
+          Parameters:
+            Location: s3://exam-tips-builds/swagger-api-template.json
