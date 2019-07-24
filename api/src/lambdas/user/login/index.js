@@ -16,7 +16,7 @@ const headers = {
 };
 
 exports.handler = async event => {
-	const { Username, PlainTextPassword, BusinessId } = JSON.parse(event.body);
+	const { Identifier, PlainTextPassword, Description } = JSON.parse(event.body);
 	const params = {
 		TableName: "Dev-Furry-Friends",
 		KeyConditionExpression: "User = :usr and BusinessDescription = :bsd",
