@@ -9,6 +9,10 @@ Globals:
   Function:
     Runtime: nodejs10.x
     Tracing: Active
+    Environment:
+      Variables:
+        TABLE_NAME: Exam-Tips
+        SIGNING_KEY_NAME: SigningKey
 Resources:
   # Lambda
   LambdaLocalCorsStub:
@@ -40,7 +44,7 @@ Resources:
             RestApiId: !Ref ExamTipsAPI
             Path: /login
             Method: post
-  
+
   RegisterUser:
     Type: AWS::Serverless::Function
     Properties:
