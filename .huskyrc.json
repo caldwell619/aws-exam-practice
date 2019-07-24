@@ -1,5 +1,5 @@
 {
 	"hooks": {
-		"pre-commit": "echo 'this will come before the commit'"
+		"pre-commit": "npm run lint:api"
 	}
 }

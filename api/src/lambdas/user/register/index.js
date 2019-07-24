@@ -19,6 +19,7 @@ const signingKey = process.env.SIGNING_KEY;
 
 exports.handler = async event => {
 	const { Identifier, Password, FirstName, LastName } = JSON.parse(event.body);
+	// add validation
 	const hashedPassword = await bcyrpt.hash(Password, 10);
 	const params = {
 		TableName,
@@ -32,6 +33,7 @@ exports.handler = async event => {
 	};
 
 	try {
+		await docClient.put(params).promise();
 		const token = await jwt.sign(
 			{
 				Identifier
@@ -39,7 +41,6 @@ exports.handler = async event => {
 			signingKey,
 			{ expiresIn: "24h" }
 		);
-		await docClient.put(params).promise();
 		return {
 			headers,
 			body: JSON.stringify({
