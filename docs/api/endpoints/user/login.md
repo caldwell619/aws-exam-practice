@@ -37,8 +37,8 @@ Plain text password to be evaluated against the hashed value in the database.
 
 ```json
 {
-  "Identifier": "email@email.com",
-  "Password": "pa$$w0rd"
+	"Identifier": "email@email.com",
+	"Password": "pa$$w0rd"
 }
 ```
 
@@ -46,10 +46,12 @@ Plain text password to be evaluated against the hashed value in the database.
 
 ```json
 {
-  "Identifier": "email@email.com",
-  "FirstName": "Bill",
-  "LastName": "Nye",
-  "Role": "user"
+	"Identifier": "bill@nye.com",
+	"Description": "user_profile",
+	"LastName": "Nye",
+	"FirstName": "Bill",
+	"token": "TOKEN",
+	"role": "user"
 }
 ```
 
