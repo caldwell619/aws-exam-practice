@@ -1,0 +1,5 @@
+{
+	"hooks": {
+		"pre-commit": "echo 'this will come before the commit'"
+	}
+}
