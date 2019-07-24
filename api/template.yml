@@ -23,25 +23,40 @@ Resources:
         ClockInOptions:
           Type: Api
           Properties:
-            RestApiId: !Ref FurryFriendsAPI
+            RestApiId: !Ref ExamTipsAPI
             Path: /{cors+}
             Method: OPTIONS
-  TestLambda:
+
+  LoginUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambdas/test/
+      CodeUri: src/lambdas/user/login
       Handler: index.handler
       Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
       Events:
         TestSetup:
           Type: Api
           Properties:
-            RestApiId: !Ref FurryFriendsAPI
-            Path: /test
-            Method: get
+            RestApiId: !Ref ExamTipsAPI
+            Path: /login
+            Method: post
+  
+  RegisterUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/user/register
+      Handler: index.handler
+      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Events:
+        TestSetup:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ExamTipsAPI
+            Path: /register
+            Method: post
 
   # API
-  FurryFriendsAPI:
+  ExamTipsAPI:
     Type: AWS::Serverless::Api
     Properties:
       Name: Exam-Tips

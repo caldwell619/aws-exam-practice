@@ -8,8 +8,9 @@
 	"basePath": "/dev",
 	"schemes": ["https"],
 	"paths": {
-		"/test": {
-			"get": {
+		"/register": {
+			"post": {
+				"x-amazon-apigateway-request-validator": "validateBody",
 				"responses": {
 					"200": {
 						"description": "Valid Response",
@@ -56,13 +57,23 @@
 				},
 				"x-amazon-apigateway-integration": {
 					"uri": {
-						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TestLambda.Arn}/invocations"
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UserRegister.Arn}/invocations"
 					},
 					"passthroughBehavior": "when_no_match",
 					"httpMethod": "POST",
 					"type": "aws_proxy"
 				}
 			},
+			"parameters": [
+				{
+					"in": "body",
+					"name": "UserRegister",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/UserRegister"
+					}
+				}
+			],
 			"options": {
 				"consumes": ["application/json"],
 				"produces": ["application/json"],
@@ -98,6 +109,156 @@
 						"application/json": "{\n  \"statusCode\" : 200\n}\n"
 					},
 					"type": "mock"
+				}
+			}
+		},
+		"/login": {
+			"post": {
+				"x-amazon-apigateway-request-validator": "validateBody",
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UserLogin.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				}
+			},
+			"parameters": [
+				{
+					"in": "body",
+					"name": "UserLogin",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/UserLogin"
+					}
+				}
+			],
+			"options": {
+				"consumes": ["application/json"],
+				"produces": ["application/json"],
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Methods": {
+								"type": "string"
+							},
+							"Access-Control-Allow-Headers": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"responses": {
+						"default": {
+							"statusCode": "200",
+							"responseParameters": {
+								"method.response.header.Access-Control-Allow-Methods": "'*'",
+								"method.response.header.Access-Control-Allow-Headers": "'*'",
+								"method.response.header.Access-Control-Allow-Origin": "'*'"
+							}
+						}
+					},
+					"passthroughBehavior": "when_no_match",
+					"requestTemplates": {
+						"application/json": "{\n  \"statusCode\" : 200\n}\n"
+					},
+					"type": "mock"
+				}
+			}
+		}
+	},
+	"definitions": {
+		"UserRegister": {
+			"type": "object",
+			"required": ["Identifier", "Description", "Password"],
+			"properties": {
+				"Identifier": {
+					"type": "string",
+					"pattern": "^[\\S]{5,40}$"
+				},
+				"Description": {
+					"type": "string",
+					"pattern": "^[\\S]{1,300}$"
+				},
+				"Password": {
+					"type": "string",
+					"pattern": "^[\\S]{6,30}$"
+				},
+				"FirstName": {
+					"type": "string",
+					"pattern": "^[\\S]{1,50}$"
+				},
+				"LastName": {
+					"type": "string",
+					"pattern": "^[\\S]{1,50}$"
+				}
+			}
+		},
+		"UserLogin": {
+			"type": "object",
+			"required": ["Identifier", "Description", "Password"],
+			"properties": {
+				"Identifier": {
+					"type": "string",
+					"pattern": "^[\\S]{5,40}$"
+				},
+				"Description": {
+					"type": "string",
+					"pattern": "^[\\S]{1,300}$"
+				},
+				"Password": {
+					"type": "string",
+					"pattern": "^[\\S]{6,30}$"
 				}
 			}
 		}
