@@ -226,10 +226,6 @@
 					"type": "string",
 					"pattern": "^[\\S]{5,40}$"
 				},
-				"Description": {
-					"type": "string",
-					"pattern": "^[\\S]{1,300}$"
-				},
 				"Password": {
 					"type": "string",
 					"pattern": "^[\\S]{6,30}$"
@@ -251,10 +247,6 @@
 				"Identifier": {
 					"type": "string",
 					"pattern": "^[\\S]{5,40}$"
-				},
-				"Description": {
-					"type": "string",
-					"pattern": "^[\\S]{1,300}$"
 				},
 				"Password": {
 					"type": "string",
