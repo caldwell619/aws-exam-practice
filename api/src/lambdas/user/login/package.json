@@ -1,0 +1,19 @@
+{
+	"name": "employee-login",
+	"version": "1.0.0",
+	"description": "Employee logging in to the application",
+	"main": "index.js",
+	"keywords": [
+		"login",
+		"employee"
+	],
+	"author": "caldwell619",
+	"license": "ISC",
+	"devDependencies": {
+		"aws-sdk": "^2.488.0"
+	},
+	"dependencies": {
+		"bcrypt": "^3.0.6",
+		"jsonwebtoken": "^8.5.1"
+	}
+}

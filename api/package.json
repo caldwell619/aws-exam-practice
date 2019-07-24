@@ -1,17 +1,21 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "API for aws-exam-help",
-  "main": "index.js",
-  "scripts": {
-    "test": "test"
-  },
-  "keywords": [
-    "aws"
-  ],
-  "author": "caldwell619",
-  "license": "ISC",
-  "devDependencies": {
-    "jest": "^24.8.0"
-  }
+	"name": "api",
+	"version": "1.0.0",
+	"description": "API for aws-exam-help",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"keywords": [
+		"aws",
+		"lambda",
+		"api",
+		"serverless"
+	],
+	"author": "caldwell619",
+	"license": "ISC",
+	"devDependencies": {
+		"babel-jest": "^24.8.0",
+		"jest": "^24.8.0"
+	}
 }
