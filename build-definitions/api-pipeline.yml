@@ -54,12 +54,8 @@ stages:
               regionName: "us-east-1"
               awsCommand: "cloudformation"
               awsSubCommand: "package"
-              awsArguments: "--s3-bucket $(S3_BUCKET) --output-template-file build/package.yml --template-file api/template.yml"
-          - script: |
-              ls
-              ls dist/
-              cat dist/package.yml
+              awsArguments: "--s3-bucket $(S3_BUCKET) --output-template-file api/build/package.yml --template-file api/template.yml"
           - task: PublishPipelineArtifact@0
             inputs:
               artifactName: "sam-template"
-              targetPath: "./dist"
+              targetPath: "api/build/"
