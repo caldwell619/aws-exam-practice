@@ -28,7 +28,9 @@ stages:
               npm ci --quiet
               npm run lint
             displayName: "Linting"
-      - job: Run_Tests
+  - stage: Linting
+    jobs:
+      - job: Run_tests
         steps:
           - script: |
               cd api/
@@ -41,7 +43,6 @@ stages:
         steps:
           - script: |
               cd api/
-              mkdir dist
               sudo pip install wheel
               sudo pip install setuptools
               sudo pip install --upgrade pip
@@ -53,7 +54,7 @@ stages:
               regionName: "us-east-1"
               awsCommand: "cloudformation"
               awsSubCommand: "package"
-              awsArguments: "--s3-bucket $(S3_BUCKET) --output-template-file dist/package.yml --template-file api/template.yml"
+              awsArguments: "--s3-bucket $(S3_BUCKET) --output-template-file build/package.yml --template-file api/template.yml"
           - script: |
               ls
               ls dist/
