@@ -26,7 +26,7 @@ stages:
               echo "This is the UI Build"
               cd ui/
               npm ci
-              npm run test
+              CI=true npm run test
             displayName: "Running Tests"
   # - stage: Build
   # jobs:
