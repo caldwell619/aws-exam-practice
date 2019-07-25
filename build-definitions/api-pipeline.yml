@@ -8,7 +8,7 @@ trigger:
       - api/*
     exclude:
       - ui/*
-      
+
 variables:
   S3_BUCKET: exam-tips-builds
 
@@ -21,18 +21,14 @@ stages:
 
   - stage: Testing
     jobs:
-      - job: Linting
+      - job: Testing_Linting
         steps:
           - script: |
               cd api/
-              npm ci
+              npm ci --quiet
               npm run lint
-            displayName: "Running Tests"
-      - job: Run_Tests
-        steps:
+            displayName: "Linting"
           - script: |
-              cd api/
-              npm ci
               npm run test
             displayName: "Running Tests"
   - stage: Build
@@ -42,9 +38,9 @@ stages:
           - script: |
               cd api/
               mkdir dist
-              # sudo pip install wheel
-              # sudo pip install setuptools
-              # sudo pip install --upgrade pip
+              sudo pip install wheel
+              sudo pip install setuptools
+              sudo pip install --upgrade pip
               sudo pip install awscli --upgrade
               aws --version
           - task: AWSCLI@1
