@@ -22,5 +22,7 @@ stages:
         steps:
           - script: |
               echo "This is the API Build"
-              ls
+              cd api/
+              npm ci
+              npm run test
             displayName: "Running Tests"

@@ -24,7 +24,9 @@ stages:
         steps:
           - script: |
               echo "This is the UI Build"
-              ls
+              cd ui/
+              npm ci
+              npm run test
             displayName: "Running Tests"
   # - stage: Build
   # jobs:
