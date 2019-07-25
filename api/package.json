@@ -4,7 +4,8 @@
 	"description": "API for aws-exam-help",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+		"lint": "eslint \"src/**/*.js\" --ignore-pattern node_modules/"
 	},
 	"keywords": [
 		"aws",
@@ -15,7 +16,24 @@
 	"author": "caldwell619",
 	"license": "ISC",
 	"devDependencies": {
+		"babel-eslint": "^10.0.2",
 		"babel-jest": "^24.8.0",
+		"eslint": "^6.1.0",
 		"jest": "^24.8.0"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true,
+			"es6": true
+		},
+		"extends": [
+			"eslint:recommended"
+		],
+		"rules": {},
+		"parser": "babel-eslint",
+		"parserOptions": {
+			"ecmaVersion": 6
+		}
 	}
 }
