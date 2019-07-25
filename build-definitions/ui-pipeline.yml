@@ -1,0 +1,55 @@
+# UI Deployment Pipeline
+
+trigger:
+  branches:
+    include:
+      - master
+      - releases/*
+  paths:
+    include:
+      - ui/*
+    exclude:
+      - api/*
+
+stages:
+  - stage: Configure
+    jobs:
+      - job: Setup
+        pool:
+          vmImage: "Ubuntu-16.04" # defines runtime
+
+  - stage: Testing
+    jobs:
+      - job: Run_Tests
+        steps:
+          - script: |
+              npm ci
+              npm run test
+            displayName: "Running Tests"
+
+  # - stage: Build
+    jobs:
+      - job: Package_CloudFormation_Template
+        steps:
+          - script: |
+              mkdir ./dist
+              sudo pip install wheel
+              sudo pip install setuptools
+              sudo pip install --upgrade pip
+              sudo pip install awscli --upgrade
+              aws --version
+          - task: AWSCLI@1
+            inputs:
+              awsCredentials: "personal"
+              regionName: "us-east-1"
+              awsCommand: "cloudformation"
+              awsSubCommand: "package"
+              awsArguments: "--s3-bucket sam-test-car --output-template-file ./dist/package.yml --template-file template.yml"
+          - script: |
+              ls
+              ls ./dist/
+              cat ./dist/package.yml
+          - task: PublishPipelineArtifact@0
+            inputs:
+              artifactName: "sam-template"
+              targetPath: "./dist"

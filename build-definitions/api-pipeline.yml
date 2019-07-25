@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - master
+      - releases/*
+  paths:
+    include:
+      - api/*
+    exclude:
+      - ui/*
+
+stages:
+  - stage: Configure
+    jobs:
+      - job: Setup
+        pool:
+          vmImage: "Ubuntu-16.04" # defines runtime
+
+  - stage: Testing
+    jobs:
+      - job: Run_Tests
+        steps:
+          - script: |
+              echo "Hey this works"
+            displayName: "Running Tests"
