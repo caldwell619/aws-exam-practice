@@ -18,11 +18,26 @@ stages:
 
   - stage: Testing
     jobs:
+      - job: Linting
+        steps:
+          - script: |
+              cd api/
+              npm ci
+              npm run lint
+            displayName: "Running Tests"
+      - job: Run_Tests
+        steps:
+          - script: |
+              pwd
+              ls
+            displayName: "Running Tests"
+  - stage: Packaging
+    jobs:
       - job: Run_Tests
         steps:
           - script: |
               echo "This is the API Build"
               cd api/
               npm ci
-              npm run test
+              CI=true npm run test
             displayName: "Running Tests"

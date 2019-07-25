@@ -7,28 +7,10 @@
 		"type": "git",
 		"url": "https://caldwell8814@dev.azure.com/caldwell8814/AWS%20Exam%20Tips/_git/AWS%20Exam%20Tips"
 	},
-	"scripts": {
-		"lint:api": "eslint \"api/src/**/*.js\" --ignore-pattern node_modules/"
-	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
 		"husky": "^3.0.1"
-	},
-	"eslintConfig": {
-		"root": true,
-		"env": {
-			"node": true,
-			"es6": true
-		},
-		"extends": [
-			"eslint:recommended"
-		],
-		"rules": {},
-		"parser": "babel-eslint",
-		"parserOptions": {
-			"ecmaVersion": 6
-		}
 	}
 }
