@@ -14,9 +14,7 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"husky": "^3.0.1",
-		"eslint": "^6.1.0",
-		"babel-eslint": "^10.0.2"
+		"husky": "^3.0.1"
 	},
 	"eslintConfig": {
 		"root": true,
