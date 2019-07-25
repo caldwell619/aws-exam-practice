@@ -21,5 +21,6 @@ stages:
       - job: Run_Tests
         steps:
           - script: |
-              echo "Hey this works"
+              echo "This is the API Build"
+              ls
             displayName: "Running Tests"
