@@ -41,12 +41,8 @@ stages:
               npm ci --quiet
               GENERATE_SOURCEMAP=false npm run build
             displayName: "Running Tests"
-
-  - stage: Publish
-    jobs:
-      - job: Publish_Artifact
-        steps:
           - task: PublishPipelineArtifact@0
             inputs:
               artifactName: "ui"
               targetPath: "ui/build/"
+            displayName: "Publish"
