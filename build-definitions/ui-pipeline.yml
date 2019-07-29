@@ -11,6 +11,9 @@ trigger:
     exclude:
       - api/*
 
+variables:
+  S3_BUCKET: exam-tips-ui
+
 stages:
   - stage: Configure
     jobs:
@@ -28,29 +31,22 @@ stages:
               npm ci --quiet
               CI=true npm run test
             displayName: "Running Tests"
-  # - stage: Build
-  # jobs:
-  #   - job: Package_CloudFormation_Template
-  #     steps:
-  #       - script: |
-  #           mkdir ./dist
-  #           sudo pip install wheel
-  #           sudo pip install setuptools
-  #           sudo pip install --upgrade pip
-  #           sudo pip install awscli --upgrade
-  #           aws --version
-  #       - task: AWSCLI@1
-  #         inputs:
-  #           awsCredentials: "personal"
-  #           regionName: "us-east-1"
-  #           awsCommand: "cloudformation"
-  #           awsSubCommand: "package"
-  #           awsArguments: "--s3-bucket sam-test-car --output-template-file ./dist/package.yml --template-file template.yml"
-  #       - script: |
-  #           ls
-  #           ls ./dist/
-  #           cat ./dist/package.yml
-  #       - task: PublishPipelineArtifact@0
-  #         inputs:
-  #           artifactName: "sam-template"
-  #           targetPath: "./dist"
+
+  - stage: Build
+    jobs:
+      - job: Run_Build
+        steps:
+          - script: |
+              cd ui/
+              npm ci --quiet
+              GENERATE_SOURCEMAP=false npm run build
+            displayName: "Running Tests"
+
+  - stage: Publish
+    jobs:
+      - job: Publish_Artifact
+        steps:
+          - task: PublishPipelineArtifact@0
+            inputs:
+              artifactName: "ui"
+              targetPath: "ui/build/"
