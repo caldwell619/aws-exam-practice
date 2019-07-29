@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./components/header/Header";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import "./App.css";
+import "./css/App.css";
 import MainRouter from "./router/MainRouter";
 
-const theme = createMuiTheme({
-	palette: {
-		type: "dark" // Switching the dark mode on is a single property value change.
-	}
-});
-
 export default function DarkTheme() {
+	const [themeMode, setThemeMode] = useState("light");
+	const theme = createMuiTheme({
+		palette: {
+			type: themeMode // Switching the dark mode on is a single property value change.
+		}
+	});
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="App">
-				<Header />
+				<Header setThemeMode={setThemeMode} />
 				<div className="content-window">
 					<MainRouter />
 				</div>

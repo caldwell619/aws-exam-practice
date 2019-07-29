@@ -5,16 +5,17 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import List from "@material-ui/core/List";
-
-import MailIcon from "@material-ui/icons/Mail";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import NavLink from "./NavLink";
 import routes from "../../router/routes";
+import "../../css/Header.css";
 
 const drawerWidth = 240;
 
@@ -48,7 +49,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ResponsiveDrawer(props) {
-	const { container } = props;
+	const [modeChecked, setModeChecked] = useState(false);
+	const { container, setThemeMode } = props;
+	console.log("props: ", props);
+
+	const handleChange = event => {
+		setModeChecked(event.target.checked);
+		setThemeMode(event.target.checked ? "dark" : "light");
+	};
+
 	const classes = useStyles();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = useState(false);
@@ -60,6 +69,23 @@ export default function ResponsiveDrawer(props) {
 	const drawer = (
 		<div>
 			<div className={classes.toolbar} />
+			<div className="theme-selector-cont">
+				<div />
+				<div>
+					<FormGroup row>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={modeChecked}
+									onChange={handleChange}
+									value="true"
+								/>
+							}
+							label="Dark Mode"
+						/>
+					</FormGroup>
+				</div>
+			</div>
 			<Divider />
 			<List>
 				{routes.map(route => (
