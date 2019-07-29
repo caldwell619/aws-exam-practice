@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -48,15 +48,25 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function ResponsiveDrawer(props) {
+export default function ResponsiveDrawer({
+	container,
+	setThemeMode,
+	persistedMode
+}) {
 	const [modeChecked, setModeChecked] = useState(false);
-	const { container, setThemeMode } = props;
-	console.log("props: ", props);
-
+	console.log("persistedMode", persistedMode);
 	const handleChange = event => {
 		setModeChecked(event.target.checked);
 		setThemeMode(event.target.checked ? "dark" : "light");
+		window.localStorage.setItem(
+			"persistedMode",
+			JSON.stringify(event.target.checked ? "dark" : "light")
+		);
 	};
+	useEffect(() => {
+		const preselectedMode = persistedMode && persistedMode === "dark";
+		setModeChecked(preselectedMode);
+	}, [persistedMode]);
 
 	const classes = useStyles();
 	const theme = useTheme();
