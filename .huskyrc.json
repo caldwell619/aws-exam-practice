@@ -1,5 +1,5 @@
 {
 	"hooks": {
-		"pre-commit": "sh git-hooks/testing-hooks.sh"
+		"pre-commit": "sh git-hooks/linting.sh"
 	}
 }
