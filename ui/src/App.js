@@ -5,7 +5,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import "./css/App.css";
 import MainRouter from "./router/MainRouter";
 
-export default function DarkTheme() {
+export default () => {
 	const persistedMode = JSON.parse(
 		window.localStorage.getItem("persistedMode")
 	);
@@ -26,4 +26,4 @@ export default function DarkTheme() {
 			</div>
 		</ThemeProvider>
 	);
-}
+};
