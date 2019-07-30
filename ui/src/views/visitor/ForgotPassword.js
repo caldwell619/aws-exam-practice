@@ -16,11 +16,10 @@ import instance from "../../config/apiInstance";
 const useStyles = makeStyles(theme => ({
 	"@global": {
 		body: {
-			backgroundColor: theme.palette.common.white
+			backgroundColor: theme.palette.background
 		}
 	},
 	paper: {
-		marginTop: theme.spacing(8),
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center"

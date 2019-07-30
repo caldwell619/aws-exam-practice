@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Header from "./components/header/Header";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import "./css/App.css";
 import MainRouter from "./router/MainRouter";
+import "./css/App.css";
 
 export default () => {
 	const persistedMode = JSON.parse(

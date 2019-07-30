@@ -5,8 +5,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import useTheme from "@material-ui/core/styles/useTheme";
+import PropTypes from "prop-types";
 
-export default ({ icon, routePath, linkText, drawerToggle }) => {
+const NavLink = ({ icon, routePath, linkText, drawerToggle }) => {
 	const theme = useTheme();
 	return (
 		<div>
@@ -24,3 +25,12 @@ export default ({ icon, routePath, linkText, drawerToggle }) => {
 		</div>
 	);
 };
+
+NavLink.propTypes = {
+	icon: PropTypes.any.isRequired,
+	routePath: PropTypes.string.isRequired,
+	linkText: PropTypes.string.isRequired,
+	drawerToggle: PropTypes.func.isRequired
+};
+
+export default NavLink;

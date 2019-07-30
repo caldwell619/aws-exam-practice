@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import NavLink from "./NavLink";
-import routes from "../../router/routes";
+import Toggle from "../input/Toggle";
+import { visitorRoutes } from "../../router/routes";
 import "../../css/Header.css";
+import PartialDrawer from "./PartialDrawer";
 
 const drawerWidth = 240;
 
@@ -54,7 +50,8 @@ export default function ResponsiveDrawer({
 	persistedMode
 }) {
 	const [modeChecked, setModeChecked] = useState(false);
-	console.log("persistedMode", persistedMode);
+	const [mobileOpen, setMobileOpen] = useState(false);
+
 	const handleChange = event => {
 		setModeChecked(event.target.checked);
 		setThemeMode(event.target.checked ? "dark" : "light");
@@ -63,48 +60,21 @@ export default function ResponsiveDrawer({
 			JSON.stringify(event.target.checked ? "dark" : "light")
 		);
 	};
+
+	const handleDrawerToggle = () => {
+		setMobileOpen(!mobileOpen);
+	};
+	const closeDrawer = () => {
+		setMobileOpen(false);
+	};
+
+	const classes = useStyles();
+	const theme = useTheme();
+
 	useEffect(() => {
 		const preselectedMode = persistedMode && persistedMode === "dark";
 		setModeChecked(preselectedMode);
 	}, [persistedMode]);
-
-	const classes = useStyles();
-	const theme = useTheme();
-	const [mobileOpen, setMobileOpen] = useState(false);
-
-	function handleDrawerToggle() {
-		console.log("handleDrawer: ", mobileOpen);
-		setMobileOpen(!mobileOpen);
-	}
-
-	const drawer = (
-		<div>
-			<div className={classes.toolbar} />
-			<div className="theme-selector-cont">
-				<div />
-				<div>
-					<FormGroup row>
-						<FormControlLabel
-							control={
-								<Switch
-									checked={modeChecked}
-									onChange={handleChange}
-									value="true"
-								/>
-							}
-							label="Dark Mode"
-						/>
-					</FormGroup>
-				</div>
-			</div>
-			<Divider />
-			<List>
-				{routes.map((route, index) => (
-					<NavLink {...route} drawerToggle={handleDrawerToggle} key={index} />
-				))}
-			</List>
-		</div>
-	);
 
 	return (
 		<div className={classes.root}>
@@ -138,7 +108,18 @@ export default function ResponsiveDrawer({
 							paper: classes.drawerPaper
 						}}
 					>
-						{drawer}
+						<PartialDrawer
+							routes={visitorRoutes}
+							closeDrawer={closeDrawer}
+							toolbar={classes.toolbar}
+						/>
+						<div className="bottom-div">
+							<Toggle
+								modeChecked={modeChecked}
+								handleChange={handleChange}
+								textPrompt={"Dark Mode"}
+							/>
+						</div>
 					</Drawer>
 				</Hidden>
 				<Hidden smDown implementation="css">
@@ -149,7 +130,18 @@ export default function ResponsiveDrawer({
 						variant="permanent"
 						open
 					>
-						{drawer}
+						<PartialDrawer
+							routes={visitorRoutes}
+							closeDrawer={closeDrawer}
+							toolbar={classes.toolbar}
+						/>
+						<div className="bottom-div">
+							<Toggle
+								modeChecked={modeChecked}
+								handleChange={handleChange}
+								textPrompt={"Dark Mode"}
+							/>
+						</div>
 					</Drawer>
 				</Hidden>
 			</nav>
