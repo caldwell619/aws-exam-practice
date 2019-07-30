@@ -6,7 +6,7 @@ import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
 import useTheme from "@material-ui/core/styles/useTheme";
 
-export default ({ icon, routePath, linkText }) => {
+export default ({ icon, routePath, linkText, drawerToggle }) => {
 	const theme = useTheme();
 	return (
 		<div>
@@ -14,8 +14,9 @@ export default ({ icon, routePath, linkText }) => {
 				component={RouterLink}
 				to={routePath}
 				style={{ color: theme.palette.text.primary }}
+				onClick={drawerToggle}
 			>
-				<ListItem button key={linkText}>
+				<ListItem button>
 					<ListItemIcon>{icon}</ListItemIcon>
 					<ListItemText primary={linkText} />
 				</ListItem>

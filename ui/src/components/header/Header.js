@@ -73,6 +73,7 @@ export default function ResponsiveDrawer({
 	const [mobileOpen, setMobileOpen] = useState(false);
 
 	function handleDrawerToggle() {
+		console.log("handleDrawer: ", mobileOpen);
 		setMobileOpen(!mobileOpen);
 	}
 
@@ -98,8 +99,8 @@ export default function ResponsiveDrawer({
 			</div>
 			<Divider />
 			<List>
-				{routes.map(route => (
-					<NavLink {...route} />
+				{routes.map((route, index) => (
+					<NavLink {...route} drawerToggle={handleDrawerToggle} key={index} />
 				))}
 			</List>
 		</div>
@@ -135,9 +136,6 @@ export default function ResponsiveDrawer({
 						onClose={handleDrawerToggle}
 						classes={{
 							paper: classes.drawerPaper
-						}}
-						ModalProps={{
-							keepMounted: true // Better open performance on mobile.
 						}}
 					>
 						{drawer}
