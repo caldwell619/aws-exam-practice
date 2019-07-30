@@ -4,6 +4,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import MainRouter from "./router/MainRouter";
 import "./css/App.css";
+import { UserContext } from "./context/UserContext";
 
 export default () => {
 	const persistedMode = JSON.parse(
@@ -16,13 +17,16 @@ export default () => {
 			type: themeMode // Switching the dark mode on is a single property value change.
 		}
 	});
+
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="App">
-				<Header setThemeMode={setThemeMode} persistedMode={persistedMode} />
-				<div className="content-window">
-					<MainRouter />
-				</div>
+				<UserContext.Provider value={false}>
+					<Header setThemeMode={setThemeMode} persistedMode={persistedMode} />
+					<div className="content-window">
+						<MainRouter />
+					</div>
+				</UserContext.Provider>
 			</div>
 		</ThemeProvider>
 	);

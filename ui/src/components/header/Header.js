@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
@@ -10,8 +10,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Toggle from "../input/Toggle";
 import { visitorRoutes } from "../../router/routes";
-import "../../css/Header.css";
 import PartialDrawer from "./PartialDrawer";
+import { UserContext } from "../../context/UserContext";
+import "../../css/Header.css";
 
 const drawerWidth = 240;
 
@@ -70,6 +71,9 @@ export default function ResponsiveDrawer({
 
 	const classes = useStyles();
 	const theme = useTheme();
+	const user = useContext(UserContext);
+
+	console.log("user context: ", user);
 
 	useEffect(() => {
 		const preselectedMode = persistedMode && persistedMode === "dark";
