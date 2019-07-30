@@ -10,7 +10,5 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"devDependencies": {
-		"husky": "^3.0.1"
-	}
+	"devDependencies": {}
 }
