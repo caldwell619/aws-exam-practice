@@ -21,12 +21,20 @@ stages:
         pool:
           vmImage: "Ubuntu-16.04" # defines runtime
 
+  - stage: Linting
+    jobs:
+      - job: Run_Linting
+        steps:
+          - script: |
+              cd ui/
+              npm ci --quiet
+              npm run lint
+            displayName: "Running Tests"
   - stage: Testing
     jobs:
       - job: Run_Tests
         steps:
           - script: |
-              echo "This is the UI Build"
               cd ui/
               npm ci --quiet
               CI=true npm run test
