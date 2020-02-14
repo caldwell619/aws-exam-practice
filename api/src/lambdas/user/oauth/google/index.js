@@ -1,83 +1,25 @@
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
-const path = require('path')
+const { OAuth2Client } = require('google-auth-library')
+const axios = require('axios')
+const CLIENT_ID = process.env.CLIENT_ID
 
-
-// base of oauth api
-const OAUTH_API_BASE = `api.typeform.com`
-const CLIENT_ID = process.env.TYPEFORM_CLIENT_ID
-const CLIENT_SECRET = process.env.TYPEFORM_CLIENT_SECRET
-
-function postRequest (host, path, body) {
-	const options = {
-		method: 'post',
-		host: host,
-		path: path,
-		headers: {
-			'Content-Length': body.length,
-			'Content-Type': 'application/x-www-form-urlencoded'
-		}
-	}
-  return new Promise((resolve, reject) => {
-    const request = https.request(options, res => {
-      res.setEncoding('utf8')
-      let response = []
-      res.on('data', chunk => response.push(chunk))
-      res.on('end', () => resolve(response.join('')))
-      res.on('error', reject)
-    })
-
-    request.write(body)
-  })
+const client = new OAuth2Client(CLIENT_ID)
+async function verify() {
+  const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+  });
+  const payload = ticket.getPayload()
+  const userid = payload['sub']
+	/*
+	// schema of payload
+	"email": "testuser@gmail.com",
+	"email_verified": "true",
+	"name" : "Test User",
+	"picture": "https://lh4.googleusercontent.com/-kYgzyAWpZzJ/ABCDEFGHI/AAAJKLMNOP/tIXL9Ir44LE/s99-c/photo.jpg",
+	"given_name": "Test",
+	"family_name": "User",
+	*/
 }
-
-async function exchangeCodeForToken (code, redirectUri) {
-  const body = `grant_type=authorization_code&code=${code}&client_id=${CLIENT_ID}&`
-    + `client_secret=${CLIENT_SECRET}&redirect_uri=${redirectUri}`
-  const response = await postRequest(OAUTH_API_BASE, `/oauth/token`, body)
-  const data = JSON.parse(response)
-
-  if (data['access_token']) {
-    return data['access_token']
-  }
-}
-
-// set `yourdomain.com` to the domain you open the popup from
-// https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
-const renderResponse = (token) => `
-<!doctype html>
-<html><body>
-<script type='application/javascript'>
-window.opener.postMessage('token:${token}', 'yourdomain.com')
-</script>
-</body></html>
-`
-
-async function callback (event, context, callback) {
-  const qs = event.queryStringParameters
-
-  if (!qs || !qs.code) {
-    return callback(null, {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Code was not specified' })
-    })
-  }
-
-  const redirectUri = `https://` + path.join(event.headers.Host, event.requestContext.path)
-
-  try {
-    const token = await exchangeCodeForToken(qs.code, redirectUri)
-    return callback(null, {
-      statusCode: 200,
-      headers: { 'Content-Type': 'text/html' },
-      body: renderResponse(token)
-    })
-  } catch (e) {
-    return callback(null, {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: e.message })
-    })
-  }
-}
-
-module.exports.callback = callback
+verify().catch(console.error)

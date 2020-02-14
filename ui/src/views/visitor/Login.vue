@@ -77,7 +77,9 @@ export default {
 			/*eslint-disable */
 			await this.googleApi.signIn()
 			const profile = this.googleApi.currentUser.get().getBasicProfile()
-			console.log('user', JSON.stringify(profile))
+			const token = this.googleApi.currentUser.get().getAuthResponse()
+			
+			console.log('token:', token) 
 			console.log('ID: ' + profile.getId()) // Do not send to your backend! Use an ID token instead.
 			console.log('Name: ' + profile.getName())
 			console.log('Image URL: ' + profile.getImageUrl())
