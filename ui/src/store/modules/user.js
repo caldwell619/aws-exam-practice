@@ -1,3 +1,5 @@
+import client from '@/services/'
+
 export default {
 	state: {
 		role: '',
@@ -13,6 +15,9 @@ export default {
 	actions: {
 		async registerUser({ commit }, userInformation){
 			commit('REGISTER_USER', userInformation)
+		},
+		async googleOauth({ commit }, codeToSend){
+
 		}
 	},
 	mutations: {

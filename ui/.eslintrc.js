@@ -7,6 +7,7 @@ module.exports = {
 	rules: {
     'no-console': 'warn',
     'no-debugger': 'warn',
+    'no-undef': 'warn',
     // always use single quotes
     quotes: [2, 'single', { avoidEscape: true }],
     // errors when semi colon are used to close
