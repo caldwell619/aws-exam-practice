@@ -1,73 +1,58 @@
 <template lang='pug'>
   div
-    v-navigation-drawer(v-model="drawer" app clipped width='350px')
-      v-tabs.internal-drawer-container(v-model="tab" grow)
-        v-tab(href='#tab-0' active-class='internal-drawer-container' ) Navigation
-        v-tab-item.internal-drawer-container(value='tab-0')
-          v-list.internal-drawer-container.listing-listy.list(dense)
-            v-subheader Home
-            v-divider
-            NavMenuItem(v-for="(route, index) in routes" :key="index" :route="route")
-        v-tab(href='#tab-1' @click="clearFleetNotifications")
-          div.text-center
-            v-badge(right color='red' :value="isNotificationBadgeShown")
-              template(v-slot:badge)
-                span {{ numberOfFleetNotifications }}
-              span Fleet
-        v-tab-item(value='tab-1')
-          FleetCardDisplay
+    v-navigation-drawer(v-model="drawer" app clipped )
+      v-list.internal-drawer-container.listing-listy.list(dense)
+        v-subheader Learn Together
+        v-divider
+        NavMenuItem(v-for="(route, index) in routes" :key="index" :route="route")
       div.find-me
         v-switch(
           v-model="isDarkMode"
           @change="saveDarkModeSetting"
           label='Dark Mode'
-          color='red'
+          :color="amazonOrange"
           hide-details
         )
     v-app-bar(app clipped-left)
-      v-badge#menu-badge(left color='red' :value="isNotificationBadgeShown" v-if="isMobile")
-        template(v-slot:badge)
-          span {{ numberOfFleetNotifications }}
-        span(@click.stop="drawer = !drawer")
-          v-btn(icon)
-            v-icon mdi-menu
-      v-app-bar-nav-icon(v-else)
+      v-app-bar-nav-icon(@click.stop="drawer = !drawer")
       v-toolbar-title.full-width
-        v-row(justify='space-between')
-          v-col Muster the Fleet
-          v-col.flex-end(cols='2')
+        v-row(justify='space-between' align='baseline')
+          v-col
+          v-col.flex-end(cols='2') Hey
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import NavMenuItem from '@/components/header/NavMenuItem.vue'
 import { routes } from '@/router/routes'
-import FleetCardDisplay from '@/components/fleet/FleetCardDisplay.vue'
-
+import { amazonOrange } from '@/data/constants'
 export default {
   components: {
     NavMenuItem,
-    FleetCardDisplay
   },
   data() {
     return {
-      tab: null,
       routes,
-      drawer: null,
-      isDarkMode: false
+      drawer: false,
+			isDarkMode: false,
+			amazonOrange
     }
   },
   computed: {
-    ...mapGetters('fleet', ['numberOfFleetNotifications']),
-    isNotificationBadgeShown(){
-      return this.numberOfFleetNotifications
-    },
     isMobile(){
       return window.innerWidth < 1264
+    },
+    menuActivatorClassName(){
+      return this.drawer
+        ? 'menu-open'
+        : ''
+    },
+    menuActivatorIconName(){
+      return this.drawer
+        ? 'mdi-close'
+        : 'mdi-chevron-right'
     }
   },
   methods: {
-    ...mapActions('fleet', ['clearFleetNotifications']),
     saveDarkModeSetting() {
       window.localStorage.setItem( 'darkMode', JSON.stringify({ darkMode: !this.darkMode }))
       this.$vuetify.theme.dark = this.isDarkMode
@@ -79,19 +64,41 @@ export default {
       this.isDarkMode = isDarkMode
       this.$vuetify.theme.dark = isDarkMode
     } catch (error) {
-      // it's fine, theres no previous dark mode setting
+      // setting it to true if not previusly set
+      this.$vuetify.theme.dark = true
     }
   }
 }
 </script>
 
 <style lang='sass'>
+  .menu-open
+    top: 8px !important
+    left: 200px !important
+  .menu-toggle
+    transition: all 0.25s
+    color: white
+    position: fixed
+    top: 20px
+    left: 7px
+    font-size: 50px
+    z-index: 100
+    background-color: rgba(52, 52, 52, 0.53)
+    border-radius: 2px
+    height: 30px
+    width: 30px
+    display: flex
+    justify-content: center
+    align-items: center
   .find-me
     height: 40px
     width: 130px
     position: absolute
-    bottom: 5%
+    bottom: 15%
     right: 4%
+    @media screen and (min-width: 786px)
+      bottom: 5%
+      right: 4%
   .internal-drawer-container
     height: 100%
   #menu-badge

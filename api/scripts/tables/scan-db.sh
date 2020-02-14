@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source .env
+source .env.local
 
 aws dynamodb scan \
  --table-name $TABLE_NAME \

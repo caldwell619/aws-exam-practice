@@ -2,17 +2,17 @@ Transform: "AWS::Serverless-2016-10-31"
 Globals:
   Api:
     TracingEnabled: true
-    Cors:
-      AllowMethods: "'*'"
-      AllowHeaders: "'*'"
-      AllowOrigin: "'*'"
   Function:
     Runtime: nodejs10.x
     Tracing: Active
+    Timeout: 30
     Environment:
       Variables:
-        TABLE_NAME: Exam-Tips
-        SIGNING_KEY_NAME: SigningKey
+        TABLE_NAME: !Sub ${TABLE_NAME}
+        SIGNING_KEY_NAME: !Sub ${SIGNING_KEY_NAME}
+        SECRET_NAME: !Sub ${SECRET_NAME}
+        TABLE_PARTITION_KEY: !Sub ${TABLE_PARTITION_KEY}
+        TABLE_RANGE_KEY: !Sub ${TABLE_RANGE_KEY}
 Resources:
   # Lambda
   LambdaLocalCorsStub:
@@ -63,10 +63,95 @@ Resources:
   ExamTipsAPI:
     Type: AWS::Serverless::Api
     Properties:
-      Name: Exam-Tips
-      StageName: dev
+      Name: !Sub ${API_NAME}
+      StageName: !Sub ${STAGE}
       DefinitionBody:
-        "Fn::Transform":
+        Fn::Transform:
           Name: "AWS::Include"
           Parameters:
-            Location: s3://exam-tips-builds/swagger-api-template.json
+            Location: !Sub s3://${S3_BUCKET}/swagger-api-template.json
+
+
+  ExamTipsDb:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${STAGE}-${TABLE_NAME}
+      AttributeDefinitions:
+        - AttributeName: !Sub ${TABLE_PARTITION_KEY}
+          AttributeType: S
+        - AttributeName: !Sub ${TABLE_RANGE_KEY}
+          AttributeType: S
+        - AttributeName: !Sub ${TABLE_GSI_1_PARTITION_KEY}
+          AttributeType: S
+        - AttributeName: !Sub ${TABLE_GSI_1_RANGE_KEY}
+          AttributeType: S
+      KeySchema:
+        - AttributeName: !Sub ${TABLE_PARTITION_KEY}
+          KeyType: HASH
+        - AttributeName: !Sub ${TABLE_RANGE_KEY}
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: !Sub ${TABLE_GSI_1_NAME}
+          KeySchema:
+            - AttributeName: !Sub ${TABLE_GSI_1_PARTITION_KEY}
+              KeyType: "HASH"
+            - AttributeName: !Sub ${TABLE_GSI_1_RANGE_KEY}
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  LambdaActionsTestRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+      Policies:
+      - PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:secretsmanager:'
+                - Ref: AWS::Region
+                - ':'
+                - Ref: AWS::AccountId
+                - :secret/
+                - Fn::Sub: ${SIGNING_KEY_NAME}
+          - Action:
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
+            - dynamodb:PutItem
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:dynamodb:'
+                - Ref: AWS::Region
+                - ':'
+                - Ref: AWS::AccountId
+                - :table/
+                - Fn::Sub: ${STAGE}-${TABLE_NAME}
+            PolicyName: !Sub ${STAGE}-LambdaActionsTest

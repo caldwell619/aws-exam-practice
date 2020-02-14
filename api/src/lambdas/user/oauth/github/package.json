@@ -1,0 +1,13 @@
+{
+	"name": "oauth-github",
+	"version": "1.0.0",
+	"description": "Allowing login through GitHub",
+	"main": "index.js",
+	"keywords": [
+		"login",
+		"google"
+	],
+	"author": "caldwell619",
+	"license": "ISC",
+	"dependencies": {}
+}
