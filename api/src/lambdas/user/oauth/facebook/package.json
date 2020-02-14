@@ -9,5 +9,7 @@
 	],
 	"author": "caldwell619",
 	"license": "ISC",
-	"dependencies": {}
+	"dependencies": {
+		"axios": "^0.19.2"
+	}
 }
