@@ -8,11 +8,44 @@ Globals:
     Timeout: 30
     Environment:
       Variables:
-        TABLE_NAME: !Sub ${TABLE_NAME}
-        SIGNING_KEY_NAME: !Sub ${SIGNING_KEY_NAME}
-        SECRET_NAME: !Sub ${SECRET_NAME}
-        TABLE_PARTITION_KEY: !Sub ${TABLE_PARTITION_KEY}
-        TABLE_RANGE_KEY: !Sub ${TABLE_RANGE_KEY}
+        CORS_URL: !Ref CorsUrl
+				# These will eventually be only in the dynamo lambdas
+        TABLE_NAME: !Ref TableName
+        TABLE_PARTITION_KEY: !Ref TablePartitionKey
+        TABLE_RANGE_KEY: !Ref TableRangeKey
+				# These will eventually be only in the authorizer
+        SIGNING_KEY_NAME: !Ref SigningKeyName
+        SECRET_NAME: !Ref SecretName
+
+Parameters:
+  TableName:
+    Description: Name of the table
+    Type: String
+  SigningKeyName:
+    Description: Name of the key used to sign / validate tokens
+    Type: String
+  SecretName:
+    Description: Name of the secret pair used to sign / validate tokens
+    Type: String
+  TablePartitionKey:
+    Description: Name of the tables partition key
+    Type: String
+  TableRangeKey:
+    Description: Name of the tables range key
+    Type: String
+  CorsUrl:
+    Description: URL that will be used for CORS
+    Type: String
+  S3Bucket:
+    Description: Bucket that will contain the build artifacts
+    Type: String
+  Stage:
+    Description: Env stage stack is deployed to
+    Type: String
+  ApiName:
+    Description: Name of the API
+    Type: String
+
 Resources:
   # Lambda
   LambdaLocalCorsStub:
@@ -63,45 +96,29 @@ Resources:
   ExamTipsAPI:
     Type: AWS::Serverless::Api
     Properties:
-      Name: !Sub ${API_NAME}
-      StageName: !Sub ${STAGE}
+      Name: !Ref ApiName
+      StageName: !Sub Stage
       DefinitionBody:
         Fn::Transform:
           Name: "AWS::Include"
           Parameters:
-            Location: !Sub s3://${S3_BUCKET}/swagger-api-template.json
+            Location: !Sub s3://${S3Bucket}/swagger-api-template.json
 
 
   ExamTipsDb:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub ${STAGE}-${TABLE_NAME}
+      TableName: !Sub Stage-${TableName}
       AttributeDefinitions:
-        - AttributeName: !Sub ${TABLE_PARTITION_KEY}
+        - AttributeName: !Ref TablePartitionKey
           AttributeType: S
-        - AttributeName: !Sub ${TABLE_RANGE_KEY}
-          AttributeType: S
-        - AttributeName: !Sub ${TABLE_GSI_1_PARTITION_KEY}
-          AttributeType: S
-        - AttributeName: !Sub ${TABLE_GSI_1_RANGE_KEY}
+        - AttributeName: !Ref TableRangeKey
           AttributeType: S
       KeySchema:
-        - AttributeName: !Sub ${TABLE_PARTITION_KEY}
+        - AttributeName: !Ref TablePartitionKey
           KeyType: HASH
-        - AttributeName: !Sub ${TABLE_RANGE_KEY}
+        - AttributeName: !Ref TableRangeKey
           KeyType: RANGE
-      GlobalSecondaryIndexes:
-        - IndexName: !Sub ${TABLE_GSI_1_NAME}
-          KeySchema:
-            - AttributeName: !Sub ${TABLE_GSI_1_PARTITION_KEY}
-              KeyType: "HASH"
-            - AttributeName: !Sub ${TABLE_GSI_1_RANGE_KEY}
-              KeyType: "RANGE"
-          Projection:
-            ProjectionType: "ALL"
-          ProvisionedThroughput:
-            ReadCapacityUnits: "5"
-            WriteCapacityUnits: "5"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
@@ -119,7 +136,8 @@ Resources:
             Service:
             - lambda.amazonaws.com
       Policies:
-      - PolicyDocument:
+			- PolicyName: !Sub ${Stage}-exam-tips-role
+      	PolicyDocument:
           Version: '2012-10-17'
           Statement:
           - Action:
@@ -139,7 +157,7 @@ Resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - :secret/
-                - Fn::Sub: ${SIGNING_KEY_NAME}
+                - Ref: SigningKeyName
           - Action:
             - dynamodb:GetItem
             - dynamodb:DeleteItem
@@ -153,5 +171,4 @@ Resources:
                 - ':'
                 - Ref: AWS::AccountId
                 - :table/
-                - Fn::Sub: ${STAGE}-${TABLE_NAME}
-            PolicyName: !Sub ${STAGE}-LambdaActionsTest
+                - Fn::Sub: ${Stage}-${TableName}            
