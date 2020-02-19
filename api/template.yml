@@ -9,11 +9,11 @@ Globals:
     Environment:
       Variables:
         CORS_URL: !Ref CorsUrl
-				# These will eventually be only in the dynamo lambdas
+        # These will eventually be only in the dynamo lambdas
         TABLE_NAME: !Ref TableName
         TABLE_PARTITION_KEY: !Ref TablePartitionKey
         TABLE_RANGE_KEY: !Ref TableRangeKey
-				# These will eventually be only in the authorizer
+        # These will eventually be only in the authorizer
         SIGNING_KEY_NAME: !Ref SigningKeyName
         SECRET_NAME: !Ref SecretName
 
@@ -44,6 +44,9 @@ Parameters:
     Type: String
   ApiName:
     Description: Name of the API
+    Type: String
+  GoogleClientId:
+    Description: Client ID of Google API
     Type: String
 
 Resources:
@@ -92,6 +95,20 @@ Resources:
             Path: /register
             Method: post
 
+  GoogleOauth:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/user/oauth/google
+      Handler: index.handler
+      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Events:
+        TestSetup:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ExamTipsAPI
+            Path: /auth/google
+            Method: post
+
   # API
   ExamTipsAPI:
     Type: AWS::Serverless::Api
@@ -136,8 +153,8 @@ Resources:
             Service:
             - lambda.amazonaws.com
       Policies:
-			- PolicyName: !Sub ${Stage}-exam-tips-role
-      	PolicyDocument:
+      - PolicyName: !Sub ${Stage}-exam-tips-role
+        PolicyDocument:
           Version: '2012-10-17'
           Statement:
           - Action:

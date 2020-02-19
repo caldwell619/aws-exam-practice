@@ -18,13 +18,14 @@
       v-toolbar-title.full-width
         v-row(justify='space-between' align='baseline')
           v-col
-          v-col.flex-end(cols='2') Hey
+          v-col.flex-end(cols='2') {{ usersName }}
 </template>
 
 <script>
 import NavMenuItem from '@/components/header/NavMenuItem.vue'
 import { routes } from '@/router/routes'
 import { amazonOrange } from '@/data/constants'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     NavMenuItem,
@@ -38,6 +39,7 @@ export default {
     }
   },
   computed: {
+		...mapGetters('user', ['usersName']),
     isMobile(){
       return window.innerWidth < 1264
     },

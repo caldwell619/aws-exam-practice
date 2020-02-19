@@ -7,8 +7,8 @@
 		"lint": "eslint \"src/**/*.js\" --ignore-pattern node_modules/",
 		"test:unit": "jest tests/unit",
 		"test:integration": "jest tests/integration",
-		"dev": "sh scripts/start-local-api.sh",
-		"deploy:dev": "source .env.dev && sh scripts/deploy.sh"
+		"dev": "sh scripts/build/start-local-api.sh",
+		"deploy:dev": "source .env.dev && sh scripts/build/deploy.sh"
 	},
 	"keywords": [
 		"aws",

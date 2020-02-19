@@ -10,7 +10,7 @@
 	"author": "caldwell619",
 	"license": "ISC",
 	"dependencies": {
-		"axios": "^0.19.2",
-		"google-auth-library": "^5.9.2"
+		"google-auth-library": "^5.9.2",
+		"simple-lambda-actions": "^1.2.55"
 	}
 }

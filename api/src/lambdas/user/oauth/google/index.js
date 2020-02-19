@@ -1,25 +1,24 @@
-const { OAuth2Client } = require('google-auth-library')
-const axios = require('axios')
-const CLIENT_ID = process.env.CLIENT_ID
+const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
+const { putItem } = require('simple-lambda-actions/dist/dynamo/')
+const { bodyParser } = require('simple-lambda-actions/dist/util/formatter')
+const verifyToken = require('./lib/verifyToken')
 
-const client = new OAuth2Client(CLIENT_ID)
-async function verify() {
-  const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-      // Or, if multiple clients access the backend:
-      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-  });
-  const payload = ticket.getPayload()
-  const userid = payload['sub']
-	/*
-	// schema of payload
-	"email": "testuser@gmail.com",
-	"email_verified": "true",
-	"name" : "Test User",
-	"picture": "https://lh4.googleusercontent.com/-kYgzyAWpZzJ/ABCDEFGHI/AAAJKLMNOP/tIXL9Ir44LE/s99-c/photo.jpg",
-	"given_name": "Test",
-	"family_name": "User",
-	*/
+const tableName = process.env.TABLE_NAME
+
+const corsUrl = process.env.CORS_URL
+const config = { corsUrl }
+
+exports.handler = async event => {
+	const responseConfig = extractResponseParams(event.httpMethod, config)
+	const ResponseHandler = new Responder(responseConfig)
+	try {
+		const reqBody = bodyParser(event.body)
+		const { idToken } = reqBody
+		const payload = await verifyToken(idToken)
+		await putItem(tableName, payload, true)
+		return ResponseHandler.respond(payload, 200)
+	} catch(error){
+		console.log('error', error)
+		return ResponseHandler.respond(error.message, error.statusCode || 500)
+	}
 }
-verify().catch(console.error)

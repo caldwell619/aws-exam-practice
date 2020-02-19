@@ -23,7 +23,6 @@ client.interceptors.request.use((config) => {
     config.headers.Authorization = authToken
   }
 
-  // Remember to unblock on CORS
   return config
 })
 

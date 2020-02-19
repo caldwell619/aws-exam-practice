@@ -259,6 +259,10 @@
 		"validateBody": {
 			"validateRequestParameters": false,
 			"validateRequestBody": true
-		}
+		},
+		"QueryString": {
+      "validateRequestParameters": true,
+      "validateRequestBody": false
+    }
 	}
-}
+}w
