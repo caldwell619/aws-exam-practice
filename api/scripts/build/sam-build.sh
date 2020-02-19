@@ -21,7 +21,9 @@ printf "\n\n$Green$( echo Linting successful. Moving on. )$Color_Off"
 printf "\n\n$BICyan$( echo Building the latest artifact.. )$Color_Off"
 printf "\n\n"
 sam build \
-  -t email-service.yml
+  -b dist/ \
+  -t template.yml \
+	--use-container
 
 if [ $? == 0 ]
 then
@@ -30,7 +32,7 @@ then
   sam package \
     --template-file template.yml \
     --s3-bucket $S3_BUCKET \
-    --output-template-file .email-service.yaml
+    --output-template-file build/.$STAGE-template.yaml
 else
   printf "\n\n$Red$( echo Build unsucessful.. )$Color_Off"
   exit 1
