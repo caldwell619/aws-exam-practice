@@ -15,14 +15,13 @@ exports.handler = async event => {
 	try {
 		const { idToken } = bodyParser(event.body)
 		const userInformation = await verifyToken(idToken)
-		// promise.all the write, and token gen
 		const tokenParams = {
 			id: userInformation.id,
 			role: userInformation.role
 		}
-		const [ , token] = await Promise.all([
-			await putItem(tableName, userInformation, true),
-			await generateToken(tokenParams)
+		const [ token ] = await Promise.all([
+			generateToken(tokenParams),
+			putItem(tableName, userInformation, true)
 		])
 		
 		return ResponseHandler.respond({ userInformation, token }, 200)
