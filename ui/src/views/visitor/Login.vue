@@ -4,13 +4,7 @@
 			v-col(align='center')
 				h1.amazon-orange Login
 		v-row.oauth-row
-			v-col(cols='4' align='center' @click="singInGoogleUser")
-				v-img.pointer-image(
-					:src="require('@/assets/images/google-logo.png')"
-					height='50px'
-					contain
-					alt='google sign in'
-				)
+			GoogleOauth(@toggleLoading="isLoading = !isLoading" :isLogin="false")
 			v-col(cols='4' align='center')
 				v-img.pointer-image(
 					:src="require(`@/assets/images/amazon-${isDarkMode}.png`)"
@@ -30,31 +24,32 @@
 				LineThroughText(text='or')
 		v-row(justify='center')
 			v-col(cols='10' align='center')
-				v-text-field(outlined label='Email' :color="amazonOrange")
+				v-text-field(outlined label='Email' :color="amazonOrange" :disabled="isLoading")
 			v-col(cols='10' align='center')
-				v-text-field(outlined label='Password' :color="amazonOrange")
+				v-text-field(outlined label='Password' :color="amazonOrange" :disabled="isLoading")
 		v-row
 			v-col(align='center')
 				router-link(to='/forgot-password') Forgot your password?
 		v-row
 			v-col(align='center')
-				v-btn(:color="amazonOrange") Login
+				v-btn(:color="amazonOrange" :loading="isLoading") Login
 		
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import { amazonOrange } from '@/data/constants'
 import LineThroughText from '@/components/util/LineThroughText.vue'
+import GoogleOauth from '@/components/oauth/Google.vue'
 export default {
 	name: 'Login',
 	components: {
-		LineThroughText
+		LineThroughText,
+		GoogleOauth
 	},
 	data(){
 		return {
 			amazonOrange,
-			googleApi: null
+			isLoading: false
 		}
 	},
 	computed: {
@@ -63,28 +58,6 @@ export default {
 				? 'dark'
 				: 'light'
 		},
-	},
-	async mounted(){
-		const client_id = process.env.VUE_APP_GOOGLE_OAUTH_CLIENT_ID
-		/*eslint-disable */
-		await gapi.load('auth2')
-		const  initializedApi = gapi.auth2.init({
-				client_id
-			})
-		/*eslint-enable */
-		this.googleApi = initializedApi
-	},
-	methods: {
-		...mapActions('user', ['googleOauth']),
-		async singInGoogleUser(){
-			try {
-				await this.googleApi.signIn()
-				const { id_token } = this.googleApi.currentUser.get().getAuthResponse()
-				await this.googleOauth(id_token)
-			} catch(error){
-				console.error('error', error)
-			}
-		}	
 	}
 }
 </script>
@@ -94,9 +67,7 @@ export default {
 a
 	color: $amazon-orange
 .oauth-row
-	margin-top: 13%
+	margin-top: 1%
 .line-row
 	margin: 4% 0
-.pointer-image
-	cursor: pointer
 </style>
