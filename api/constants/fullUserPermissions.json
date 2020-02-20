@@ -1,0 +1,8 @@
+{
+	"#PERMISSION/questions/dynamo": {
+		"role": "full-user",
+		"restrictions": {
+			"id": true
+		}
+	}
+}
