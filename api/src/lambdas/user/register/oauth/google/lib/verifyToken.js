@@ -1,7 +1,7 @@
 const { OAuth2Client } = require('google-auth-library')
 const CustomError = require('simple-lambda-actions/dist/util/ErrorHandler')
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const partitionKey = process.env.TABLE_PARTITION_KEY
 const rangeKey = process.env.TABLE_RANGE_KEY
 
@@ -14,7 +14,7 @@ const verify = async idToken =>  {
 	try {
 		const ticket = await client.verifyIdToken({
 				idToken,
-				audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+				audience: CLIENT_ID,
 		})
 		const { email, sub, given_name, family_name, picture, locale } = ticket.getPayload()
 		const relevantInfo = {
