@@ -4,7 +4,7 @@
 	"description": "API for aws-exam-help",
 	"scripts": {
 		"install-helper": "sh scripts/build/update-lib-version.sh",
-		"lint": "eslint \"src/**/*.js\" --ignore-pattern node_modules/",
+		"lint": "eslint \"src/**/*.js\" --ignore-pattern node_modules/ --fix",
 		"test:unit": "jest tests/unit",
 		"test:integration": "jest tests/integration",
 		"dev": "sh scripts/build/start-local-api.sh",
@@ -23,19 +23,5 @@
 		"babel-jest": "^24.8.0",
 		"eslint": "^6.1.0",
 		"jest": "^24.8.0"
-	},
-	"eslintConfig": {
-		"root": true,
-		"env": {
-			"node": true
-		},
-		"extends": [
-			"eslint:recommended"
-		],
-		"rules": {},
-		"parser": "babel-eslint",
-		"parserOptions": {
-			"ecmaVersion": 10
-		}
 	}
 }

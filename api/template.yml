@@ -18,6 +18,9 @@ Globals:
         SECRET_NAME: !Ref SecretName
 
 Parameters:
+  TokenDuration:
+    Description: Name of the table
+    Type: String
   TableName:
     Description: Name of the table
     Type: String
@@ -57,7 +60,7 @@ Resources:
       CodeUri: src/lambdas/options/
       Handler: index.handler
       Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
-      FunctionName: cors_handler
+      FunctionName: !Sub ${Stage}-${ApiName}-cors_handler
       Timeout: 30
       Events:
         ClockInOptions:
@@ -84,7 +87,7 @@ Resources:
   RegisterUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambdas/user/register
+      CodeUri: src/lambdas/user/register/standard
       Handler: index.handler
       Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
       Events:
@@ -95,18 +98,21 @@ Resources:
             Path: /register
             Method: post
 
-  GoogleOauth:
+  GoogleOauthRegister:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambdas/user/oauth/google
+      CodeUri: src/lambdas/user/register/oauth/google
       Handler: index.handler
+			Environment:
+				Variables:
+					TOKEN_DURATION: !Ref TokenDuration
       Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
       Events:
         TestSetup:
           Type: Api
           Properties:
             RestApiId: !Ref ExamTipsAPI
-            Path: /auth/google
+            Path: /register/oauth/google
             Method: post
 
   # API
