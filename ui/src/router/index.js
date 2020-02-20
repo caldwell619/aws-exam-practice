@@ -37,6 +37,26 @@ const routes = [
 			},
     ]
   },
+  {
+    path: '/admin',
+    name: 'AdminRoot',
+    component: () => import('@/views/authenticated/Root.vue'),
+    beforeEnter(to, from, next) {
+			const isAuthenticated = store.getters['session/isAdmin']
+			if(isAuthenticated || isRunningLocally){
+				next()
+			} else {
+				next('/login')
+			}
+    },
+    children: [
+			{
+				path: 'home',
+				name: 'AdminHome',
+				component: () => import('@/views/admin/Home.vue'),
+			},
+    ]
+  },
 ]
 
 export default new VueRouter({

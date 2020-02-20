@@ -4,6 +4,6 @@
 
 <script>
 export default {
-	name: 'UserRoot'
+	name: 'AdminRoot'
 }
 </script>

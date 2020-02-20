@@ -7,8 +7,8 @@ export default {
 		role: '',
 		givenName: '',
 		familyName: '',
-		pictureUrl: '',
-		locale: '',
+		pictureUrl: null,
+		locale: 'en',
 		email: '', 
 		id: '',
 	},
@@ -22,6 +22,9 @@ export default {
 			} else {
 				return ''
 			}
+		},
+		pictureUrl(state){
+			return state.pictureUrl
 		}
 	},
 	actions: {
