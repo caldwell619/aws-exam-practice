@@ -103,9 +103,9 @@ Resources:
     Properties:
       CodeUri: src/lambdas/user/register/oauth/google
       Handler: index.handler
-			Environment:
-				Variables:
-					TOKEN_DURATION: !Ref TokenDuration
+      Environment:
+        Variables:
+          TOKEN_DURATION: !Ref TokenDuration
       Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
       Events:
         TestSetup:
