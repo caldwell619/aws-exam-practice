@@ -1,4 +1,5 @@
 import service from '@/services/user'
+import { getItemFromLocalStorage, writeToLocalStorage } from '@/utils/localStorage'
 
 export default {
 	namespaced: true,
@@ -27,16 +28,26 @@ export default {
 		async registerUser({ commit }, userInformation){
 			commit('REGISTER_USER', userInformation)
 		},
-		async googleOauth({ commit }, codeToSend){
-			const userPayload = await service.sendGoogleCodeToApi(codeToSend)
-			commit('UPDATE_GOOGLE_USER', userPayload)
+		async googleOauth({ commit, dispatch }, { codeToSend, isLogin }){
+			const { userInformation, token } = isLogin
+				? await service.googleOauthLogin(codeToSend)
+				: await service.googleOauthRegister(codeToSend)
+				dispatch('session/beginNewSession', token, { root: true })
+			commit('UPDATE_USER', userInformation)
+		},
+		restoreUserToStore({ commit }){
+			const prevUser = getItemFromLocalStorage('user')
+			if(prevUser){
+				commit('UPDATE_USER', prevUser)
+			}
 		}
 	},
 	mutations: {
-		UPDATE_GOOGLE_USER(state, userInformation){
+		UPDATE_USER(state, userInformation){
 			Object.keys(userInformation).forEach(key => {
 				state[key] = userInformation[key]
 			})
+			writeToLocalStorage('user', userInformation)
 		}
 	}
 }
