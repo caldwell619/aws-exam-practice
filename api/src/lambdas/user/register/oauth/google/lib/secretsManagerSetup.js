@@ -7,7 +7,6 @@ const expiryDurationOfToken = process.env.TOKEN_DURATION
 const secretManagerParams = { SecretId, nameOfSecret }
 
 const generateToken = payload => {
-	// returning the promise, must be awaited
 	return generateTokenWithSecretsManager(secretManagerParams, payload, expiryDurationOfToken)
 }
 
