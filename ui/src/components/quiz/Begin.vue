@@ -1,5 +1,5 @@
 <template lang='pug'>
-	span
+	v-container
 		v-row
 			v-col
 				h3.amazon-orange Timer
@@ -21,7 +21,7 @@
 		v-row
 			v-col(align='center')
 				h2.amazon-orange.question-title Question
-				h3.left-align {{ question.title }}
+				h3.left-align.pre {{ question.title }}
 		v-row
 			v-col
 				v-radio-group(v-model="givenAnswer")
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import shuffle from '@/utils/shuffle'
 import { amazonOrange } from '@/data/constants'
 import questions from '@/data/testQuestions.js'
 import Timer from '@/components/util/Timer.vue'
@@ -52,7 +53,6 @@ export default {
 			isLoading: false,
 			givenAnswer: null,
 			questionNumber: 1,
-			numberOfQuestions: 20,
 			amazonOrange
 		}
 	},
@@ -65,8 +65,11 @@ export default {
 		}
 	},
 	computed: {
+		numberOfQuestions(){
+			return this.$store.state.question.numberOfQuestions
+		},
 		answerSet(){
-			return [this.question.correctAnswer, ...this.question.incorrectAnswers]
+			return shuffle([this.question.correctAnswer, ...this.question.incorrectAnswers])
 		},
 		categoryTitle(){
 			return this.question && this.question.category.text || ''

@@ -21,13 +21,13 @@ export const questionScopes = [
 	},
 	{
 		text: 'Cloud Practitioner',
-		value: 'cloudPractitioner'
+		value: 'cloudPrac'
 	},
 ]
 export const questionCategories = [
 	{
 		text: 'DynamoDB',
-		value: 'dynamoDb'
+		value: 'dynamo'
 	},
 	{
 		text: 'EC2',

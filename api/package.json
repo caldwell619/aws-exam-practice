@@ -3,12 +3,14 @@
 	"version": "1.0.0",
 	"description": "API for aws-exam-help",
 	"scripts": {
+		"local-dynamo": "concurrently \"sh scripts/tables/start-local-dynamo.sh && sh scripts/tables/create-local-table.sh\" \"wait-on http://localhost:8000\"",
 		"install-helper": "sh scripts/build/update-lib-version.sh",
 		"lint": "eslint \"src/**/*.js\" --ignore-pattern node_modules/ --fix",
 		"test:unit": "jest tests/unit",
 		"test:integration": "jest tests/integration",
 		"dev": "sh scripts/build/start-local-api.sh",
-		"deploy:dev": "source .env.dev && sh scripts/build/deploy.sh"
+		"deploy:dev": "source .env.dev && sh scripts/build/deploy.sh",
+		"seed-questions": "sh scripts/seeder/seed.sh"
 	},
 	"keywords": [
 		"aws",
@@ -19,9 +21,14 @@
 	"author": "caldwell619",
 	"license": "ISC",
 	"devDependencies": {
+		"aws-sdk": "^2.623.0",
 		"babel-eslint": "^10.0.2",
 		"babel-jest": "^24.8.0",
+		"concurrently": "^5.1.0",
 		"eslint": "^6.1.0",
-		"jest": "^24.8.0"
+		"jest": "^24.8.0",
+		"simple-lambda-actions": "^1.2.56",
+		"uuid": "^3.4.0",
+		"wait-on": "^4.0.0"
 	}
 }

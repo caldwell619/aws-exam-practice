@@ -12,7 +12,8 @@ exports.handler = async event => {
 		const { scope, category, numberOfQuestions  } = event.queryStringParameters
 		const { Items } = await queryTable(scope, category)
 		const randomizedQuestions = randomizeAndChop(Items, numberOfQuestions)
-		return ResponseHandler.respond({ questions: randomizedQuestions }, 200)
+		const responseBody = { questions: randomizedQuestions, numberOfQuestions: randomizedQuestions.length }
+		return ResponseHandler.respond(responseBody, 200)
 	} catch(error){
 		return ResponseHandler.respond(error.message, error.statusCode || 500)
 	}

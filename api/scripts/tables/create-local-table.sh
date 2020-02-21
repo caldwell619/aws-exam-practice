@@ -2,6 +2,8 @@
 
 source .env.local
 
+docker run -p 8000:8000 amazon/dynamodb-local &
+
 aws dynamodb create-table \
   --table-name $TABLE_NAME \
   --attribute-definitions \

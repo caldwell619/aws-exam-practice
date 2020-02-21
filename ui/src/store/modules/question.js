@@ -3,7 +3,8 @@ import service from '@/services/question'
 export default {
 	namespaced: true,
 	state: {
-		questionsForQuiz: {}
+		questionsForQuiz: {},
+		numberOfQuestions: 0
 	},
 	getters: {},
 	actions: {
@@ -11,13 +12,17 @@ export default {
 			await service.createQuestion(questionToSave)
 		},
 		async fetchQuestions({ commit }, questionToSave){
-			const { questions } = await service.fetchQuestions(questionToSave)
+			const { questions, numberOfQuestions } = await service.fetchQuestions(questionToSave)
 			commit('UPDATE_QUESTIONS_FOR_QUIZ', questions)
+			commit('UPDATE_NUMBER_OF_QUESTIONS', numberOfQuestions)
 		},
 	},
 	mutations: {
 		UPDATE_QUESTIONS_FOR_QUIZ(state, questionsForQuiz){
 			state.questionsForQuiz = questionsForQuiz
+		},
+		UPDATE_NUMBER_OF_QUESTIONS(state, numberOfQuestions){
+			state.numberOfQuestions = numberOfQuestions
 		}
 	}
 }

@@ -3,7 +3,7 @@ const TableName = process.env.TABLE_NAME
 const partitionKeyName = process.env.TABLE_PARTITION_KEY
 const rangeKeyName = process.env.TABLE_RANGE_KEY
 
-const queryTable = (scope, category) => {
+const queryTable = (category, scope) => {
 	const partitionKeySearchTerm = '#QUESTION'
 	const rangeKeySearchTerm = `${scope}_${category}`
 	const params = {
