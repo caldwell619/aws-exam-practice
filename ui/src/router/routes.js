@@ -34,6 +34,17 @@ export const visitorRoutes = [
   },
 ]
 
-export const regularAdminRoutes = []
+export const authenticatedRoutes = [
+	{
+    path: '/user/home',
+    icon: 'mdi-home',
+    title: 'Home',
+  },
+	{
+    path: '/user/quiz/settings',
+    icon: 'mdi-help',
+    title: 'Take a Quiz',
+  }
+]
 
-export const authenticatedRoutes = []
+export const regularAdminRoutes = []

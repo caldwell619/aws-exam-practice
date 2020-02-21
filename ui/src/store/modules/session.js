@@ -20,14 +20,11 @@ export default {
 		isReadyToShow(state){
 			return state.isReadyToShow
 		},
-    allowableRoutes(state) {
+    allowableRoutes(state, getters, rootState) {
       const isSessionValid = state.expiredDate > Date.now()
-      if(state.user){
-        if (state.user.isAuthenticated && isSessionValid && state.user.role === 'admin') return authenticatedRoutes
-        if (state.user.isAuthenticated && isSessionValid && state.user.role === 'user') return regularAdminRoutes
-      } else {
-        return visitorRoutes
-      }
+			if (state.isAuthenticated && isSessionValid && rootState.user.role === 'admin') return regularAdminRoutes
+			if (state.isAuthenticated && isSessionValid && rootState.user.role === 'full-user') return authenticatedRoutes
+			return visitorRoutes
     },
   },
   actions: {

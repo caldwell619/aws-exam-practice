@@ -4,7 +4,7 @@
 			v-list.internal-drawer-container.listing-listy.list(dense)
 				v-subheader {{ usersName }}
 				v-divider
-				NavMenuItem(v-for="(route, index) in routes" :key="index" :route="route")
+				NavMenuItem(v-for="(route, index) in allowableRoutes" :key="index" :route="route")
 			div.find-me
 				v-switch(
 					v-model="isDarkMode"
@@ -43,6 +43,7 @@ export default {
 	},
 	computed: {
 		...mapGetters('user', ['usersName']),
+		...mapGetters('session', ['allowableRoutes']),
 		isMobile(){
 			return window.innerWidth < 1264
 		},
