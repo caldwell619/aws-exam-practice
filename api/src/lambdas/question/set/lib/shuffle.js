@@ -13,10 +13,14 @@ const chopArrayAtIndex = (arrayToChop, indexToChopFrom) => {
 }
 
 const randomizeAndChop = (arrayToChop, maxNumberOfItems) => {
-	const baseArray = [...arrayToChop]
-	shuffleArray(baseArray)
-	chopArrayAtIndex(baseArray, maxNumberOfItems)
-	return baseArray
+	if(arrayToChop.length < maxNumberOfItems) {
+		return arrayToChop
+	} else {
+		const baseArray = [...arrayToChop]
+		shuffleArray(baseArray)
+		chopArrayAtIndex(baseArray, maxNumberOfItems)
+		return baseArray
+	}
 }
 
 module.exports = randomizeAndChop
