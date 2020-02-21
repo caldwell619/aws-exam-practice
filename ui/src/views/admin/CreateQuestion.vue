@@ -2,7 +2,7 @@
 	v-container
 		v-row
 			v-col(align='center')
-				h1.amazon-orange Create Question
+				h1.amazon-orange Submit Question
 		v-row
 			v-col
 				v-textarea(
@@ -16,11 +16,21 @@
 		v-row
 			v-col
 				v-autocomplete(
-					v-model="category"
-					:items="questionCategories"
-					label='Category'
+					v-model="domain"
+					:items="questionDomains"
+					label='Domain'
 					:color="amazonOrange"
 					outlined
+				)
+		v-row
+			v-col
+				v-autocomplete(
+					v-model="tags"
+					:items="questionTags"
+					label='Tags'
+					:color="amazonOrange"
+					outlined
+					multiple
 				)
 		v-row
 			v-col
@@ -71,7 +81,7 @@
 </template>
 
 <script>
-import { questionCategories, amazonOrange } from '@/data/constants'
+import { questionDomains, questionTags, amazonOrange } from '@/data/constants'
 import IncorrectAnswersHolder from '@/components/questions/IncorrectAnswerHolder.vue'
 import { mapActions } from 'vuex'
 export default {
@@ -82,13 +92,15 @@ export default {
 	data(){
 		return {
 			isLoading: false,
-			category: null,
+			domain: null,
 			title: null,
 			correctAnswer: null,
 			incorrectAnswer: null,
+			tags: [],
 			isShowingIncorrectAnswers: false,
 			incorrectAnswers: [],
-			questionCategories,
+			questionDomains,
+			questionTags,
 			amazonOrange
 		}
 	},
@@ -109,7 +121,8 @@ export default {
 		async submitQuestion(){
 			const question = {
 				title: this.title,
-				category: this.category,
+				domain: this.domain,
+				tags: this.tags,
 				correctAnswer: this.correctAnswer,
 				incorrectAnswers: this.incorrectAnswers
 			}

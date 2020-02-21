@@ -43,7 +43,7 @@ export const authenticatedRoutes = [
 	{
     path: '/user/quiz/settings',
     icon: 'mdi-help',
-    title: 'Take a Quiz',
+    title: 'Practice',
   }
 ]
 

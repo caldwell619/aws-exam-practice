@@ -1,19 +1,16 @@
-const uuid = require('uuid/v4')
-
 module.exports = [
 	{
-		'id': '#QUESTION',
-		'resourceDescription': `ec2_devAssociate_${uuid()}`,
 		'title': 'A company is migrating a legacy application to Amazon EC2. The application uses  \
 		a user name and password stored in the source code to connect to a MySQL database. \
 		The database will be migrated to an Amazon RDS for MySQL DB instance. \
 		As part of the migration, the company wants to implement a secure \
 		way to store and automatically rotate the database credentials. \n \
 		Which approach meets these requirements?',
-		'category': {
+		'domain': {
 			text: 'EC2',
 			value: 'ec2'
 		},
+		tags: [],
 		'incorrectAnswers': [
 			'Store the database credentials in environment variables in an Amazon Machine Image (AMI). Rotate the \
 			credentials by replacing the AMI.',
@@ -31,13 +28,12 @@ module.exports = [
 		},
 	},
 	{
-		'id': '#QUESTION',
-		'resourceDescription': `dynamo_cloudPrac_${uuid()}`,
 		'title': 'What is an example of a good choice for a partition key?',
-		'category': {
+		'domain': {
 			text: 'DynamoDB',
 			value: 'dynamo'
 		},
+		tags: [],
 		'incorrectAnswers': [
 			'Auto incrementing ID',
 			'A randomly generate ID that ensures uniqueness',
@@ -50,13 +46,12 @@ module.exports = [
 		},
 	},
 	{
-		'id': '#QUESTION',
-		'resourceDescription': `lambda_cloudPrac_${uuid()}`,
 		'title': 'What is the maximum number of concurrent requests for Lambda?',
-		'category': {
+		'domain': {
 			text: 'Lambda',
 			value: 'lambda'
 		},
+		tags: [],
 		'incorrectAnswers': [
 			'500',
 			'No Limit',

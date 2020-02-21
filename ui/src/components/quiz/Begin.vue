@@ -21,7 +21,8 @@
 		v-row
 			v-col(align='center')
 				h2.amazon-orange.question-title Question
-				h3.left-align.pre {{ question.title }}
+				v-divider.divider-spacing
+				h4.left-align.pre.question-content {{ question.title }}
 		v-row
 			v-col
 				v-radio-group(v-model="givenAnswer")
@@ -88,6 +89,7 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang='sass'>
+.question-content
+	
 </style>

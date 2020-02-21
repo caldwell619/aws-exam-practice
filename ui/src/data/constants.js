@@ -24,7 +24,7 @@ export const questionScopes = [
 		value: 'cloudPrac'
 	},
 ]
-export const questionCategories = [
+export const questionTags = [
 	{
 		text: 'DynamoDB',
 		value: 'dynamo'
@@ -73,4 +73,28 @@ export const questionCategories = [
 		text: 'KMS',
 		value: 'kms'
 	},
+]
+
+export const questionDomains = [
+	{
+		text: 'Deployment',
+		value: 'deployment'
+	},
+	{
+		text: 'Security',
+		value: 'security'
+	},
+	{
+		text: 'Development with AWS Services',
+		value: 'dev'
+	},
+	{
+		text: 'Refactoring',
+		value: 'refactor'
+	},
+	{
+		text: 'Monitoring and Troubleshooting ',
+		value: 'monitor'
+	},
+
 ]
