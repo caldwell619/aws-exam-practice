@@ -1,0 +1,14 @@
+{
+	"name": "fetch-question-set",
+	"version": "1.0.0",
+	"description": "Fetching a set of questions based on the params",
+	"main": "index.js",
+	"keywords": [
+		"questions"
+	],
+	"author": "caldwell619",
+	"license": "ISC",
+	"dependencies": {
+		"simple-lambda-actions": "^1.2.56"
+	}
+}

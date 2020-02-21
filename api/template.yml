@@ -53,7 +53,6 @@ Parameters:
     Type: String
 
 Resources:
-  # Lambda
   LambdaLocalCorsStub:
     Type: AWS::Serverless::Function
     Properties:
@@ -70,6 +69,7 @@ Resources:
             Path: /{cors+}
             Method: OPTIONS
 
+# Auth
   LoginUser:
     Type: AWS::Serverless::Function
     Properties:
@@ -114,6 +114,21 @@ Resources:
             RestApiId: !Ref ExamTipsAPI
             Path: /register/oauth/google
             Method: post
+
+# Questions
+  FetchQuestionSet:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/questions/set
+      Handler: index.handler
+      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Events:
+        TestSetup:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ExamTipsAPI
+            Path: /question/set
+            Method: get
 
   # API
   ExamTipsAPI:
