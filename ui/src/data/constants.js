@@ -98,3 +98,8 @@ export const questionDomains = [
 	},
 
 ]
+
+export const supportedLocales = [
+	'English',
+	'Español'
+]

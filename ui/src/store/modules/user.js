@@ -28,8 +28,10 @@ export default {
 		}
 	},
 	actions: {
-		async registerUser({ commit }, userInformation){
-			commit('REGISTER_USER', userInformation)
+		async registerUser({ commit, dispatch }, userPayload){
+			const { userInformation, token } = await service.standardRegister(userPayload)
+			dispatch('session/beginNewSession', token, { root: true })
+			commit('UPDATE_USER', userInformation)
 		},
 		async googleOauth({ commit, dispatch }, { codeToSend, isLogin }){
 			const { userInformation, token } = isLogin

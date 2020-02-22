@@ -15,6 +15,10 @@ export default {
 		const { data } = await client.post('/register/oauth/google', { idToken: codeToSend })
 		return data
 	},
+	async standardRegister(userPayload){
+		const { data } = await client.post('/register', userPayload)
+		return data
+	},
 	async googleOauthLogin(codeToSend){
 		const apiRes = await client.post('/login/oauth/google', { idToken: codeToSend })
 		console.log('api res', apiRes)

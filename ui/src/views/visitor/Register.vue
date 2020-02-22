@@ -2,9 +2,9 @@
 	v-container
 		v-row
 			v-col(align='center')
-				h1.amazon-orange Login
+				h1.amazon-orange Register
 		v-row.oauth-row
-			GoogleOauth(@toggleLoading="isLoading = !isLoading" :isLogin="true")
+			GoogleOauth(@toggleLoading="isLoading = !isLoading" :isLogin="false")
 			v-col(cols='4' align='center')
 				v-img.pointer-image(
 					:src="require(`@/assets/images/amazon-${isDarkMode}.png`)"
@@ -22,26 +22,19 @@
 		v-row.line-row(justify='center')
 			v-col(cols='10')
 				LineThroughText(text='or')
-		v-row(justify='center')
-			v-col(cols='10' align='center')
-				v-text-field(outlined label='Email' :color="amazonOrange" :disabled="isLoading")
-			v-col(cols='10' align='center')
-				v-text-field(outlined label='Password' :color="amazonOrange" :disabled="isLoading")
 		v-row
 			v-col(align='center')
-				router-link(to='/forgot-password') Forgot your password?
-		v-row
-			v-col(align='center')
-				v-btn(:color="amazonOrange" :loading="isLoading") Login
+				router-link(to='/register/standard')
+					v-btn(:color="amazonOrange" :loading="isLoading") Sign Up
 		
 </template>
 
 <script>
-import { amazonOrange } from '@/data/constants'
+import { amazonOrange, supportedLocales } from '@/data/constants'
 import LineThroughText from '@/components/util/LineThroughText.vue'
 import GoogleOauth from '@/components/oauth/Google.vue'
 export default {
-	name: 'Login',
+	name: 'Register',
 	components: {
 		LineThroughText,
 		GoogleOauth
@@ -49,6 +42,8 @@ export default {
 	data(){
 		return {
 			amazonOrange,
+			supportedLocales,
+			chosenLocale: 'English',
 			isLoading: false
 		}
 	},
@@ -67,7 +62,7 @@ export default {
 a
 	color: $amazon-orange
 .oauth-row
-	margin-top: 1%
+	margin-top: 15%
 .line-row
 	margin: 4% 0
 </style>
