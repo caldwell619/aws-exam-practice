@@ -7,10 +7,13 @@ module.exports = [
 		way to store and automatically rotate the database credentials. \n \
 		Which approach meets these requirements?',
 		'domain': {
+			text: 'Security',
+			value: 'security'
+		},
+		tags: [{
 			text: 'EC2',
 			value: 'ec2'
-		},
-		tags: [],
+		}],
 		'incorrectAnswers': [
 			'Store the database credentials in environment variables in an Amazon Machine Image (AMI). Rotate the \
 			credentials by replacing the AMI.',
