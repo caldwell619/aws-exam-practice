@@ -89,6 +89,9 @@ Resources:
     Properties:
       CodeUri: src/lambdas/user/register/standard
       Handler: index.handler
+      Environment:
+        Variables:
+          TOKEN_DURATION: !Ref TokenDuration
       Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
       Events:
         TestSetup:

@@ -3,7 +3,7 @@
 		v-row
 			v-col
 				h3.amazon-orange Timer
-				Timer(@timerToggle="" :shouldStart="shouldStart" justify='start')
+				Timer(@timerToggle="shouldStart = !shouldStart" :shouldStart="shouldStart" justify='start')
 			v-col
 				h3.amazon-orange Category:
 				v-row
@@ -75,6 +75,9 @@ export default {
 		categoryTitle(){
 			return this.question && this.question.category.text || ''
 		}
+	},
+	mounted(){
+		this.shouldStart = true
 	},
 	methods: {
 		submitAnswer(){

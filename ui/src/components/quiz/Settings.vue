@@ -6,9 +6,9 @@
 		v-row(justify='center')
 			v-col(align='center')
 				v-autocomplete(
-					v-model="chosenCategory"
-					:items="questionCategories"
-					label='Category'
+					v-model="chosenDomain"
+					:items="questionDomains"
+					label='Domain'
 					:color="amazonOrange"
 					outlined
 				)
@@ -38,7 +38,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { questionScopes, questionCategories, amazonOrange } from '@/data/constants'
+import { questionScopes, questionDomains, amazonOrange } from '@/data/constants'
 const anyOption = { text: 'Any', value: 'any'}
 export default {
 	name: 'Splash',
@@ -46,11 +46,11 @@ export default {
 		return {
 			amazonOrange,
 			chosenScope: null,
-			chosenCategory: null,
+			chosenDomain: null,
 			isLoading: false,
 			numberOfQuestions: null,
 			questionScopes,
-			questionCategories: [...questionCategories, anyOption]
+			questionDomains: [...questionDomains, anyOption]
 		}
 	},
 	methods: {
@@ -62,7 +62,7 @@ export default {
 			this.isLoading = true
 			const questionParams = {
 				scope: this.chosenScope,
-				category: this.chosenCategory,
+				domain: this.chosenDomain,
 				numberOfQuestions: this.numberOfQuestions
 			}
 			try {

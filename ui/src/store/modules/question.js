@@ -11,8 +11,8 @@ export default {
 		async createQuestion(context, questionToSave){
 			await service.createQuestion(questionToSave)
 		},
-		async fetchQuestions({ commit }, questionToSave){
-			const { questions, numberOfQuestions } = await service.fetchQuestions(questionToSave)
+		async fetchQuestions({ commit }, questionParams){
+			const { questions, numberOfQuestions } = await service.fetchQuestions(questionParams)
 			commit('UPDATE_QUESTIONS_FOR_QUIZ', questions)
 			commit('UPDATE_NUMBER_OF_QUESTIONS', numberOfQuestions)
 		},
