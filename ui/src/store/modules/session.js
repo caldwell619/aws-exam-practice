@@ -37,8 +37,8 @@ export default {
 				// fetch new token - update with new
 				commit('UPDATE_SESSION', previousSession.token)
 				dispatch('user/restoreUserToStore', null, { root: true })
-				commit('MAKE_APP_READY')
 			}
+			commit('MAKE_APP_READY')
 		},
     endSession({ commit }) {
       commit('END_SESSION')
