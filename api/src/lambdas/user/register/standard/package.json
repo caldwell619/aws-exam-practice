@@ -14,6 +14,7 @@
 	},
 	"dependencies": {
 		"bcrypt": "^3.0.6",
-		"jsonwebtoken": "^8.5.1"
+		"jsonwebtoken": "^8.5.1",
+		"simple-lambda-actions": "^1.2.58"
 	}
 }

@@ -1,17 +1,14 @@
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
 const { putItem } = require('simple-lambda-actions/dist/dynamo/')
 const { bodyParser } = require('simple-lambda-actions/dist/util/formatter')
 const verifyToken = require('./lib/verifyToken')
 const generateToken = require('./lib/secretsManagerSetup')
 
 const tableName = process.env.TABLE_NAME
-
 const corsUrl = process.env.CORS_URL
-const config = { corsUrl }
 
 exports.handler = async event => {
-	const responseConfig = extractResponseParams(event.httpMethod, config)
-	const ResponseHandler = new Responder(responseConfig)
+	const ResponseHandler = new Responder(corsUrl, event.httpMethod)
 	try {
 		const { idToken } = bodyParser(event.body)
 		const userInformation = await verifyToken(idToken)

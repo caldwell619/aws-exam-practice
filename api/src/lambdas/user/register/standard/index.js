@@ -1,63 +1,27 @@
-const DynamoDB = require('aws-sdk/clients/dynamodb')
 const bcyrpt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-let options = {
-	region: 'us-east-1'
-}
-if (process.env.AWS_SAM_LOCAL) {
-	options.endpoint = 'http://host.docker.internal:8000'
-}
-const docClient = new DynamoDB.DocumentClient(options)
-const headers = {
-	'Access-Control-Allow-Headers': '*',
-	'Access-Control-Allow-Origin': '*',
-	'Access-Control-Allow-Methods': '*',
-	'Content-Type': 'application/json'
-}
-const TableName = process.env.TABLE_NAME
-const signingKey = process.env.SIGNING_KEY
+const Responder= require('simple-lambda-actions/dist/util/responseHandler')
+const { bodyParser } = require('simple-lambda-actions/dist/util/formatter')
+const putUser = require('./lib/putUser')
+const generateToken = require('./lib/secretsManagerSetup')
+
+const role = 'full-user'
+const numberOfSaltRounds = 10
+const corsUrl = process.env.CORS_URL
 
 exports.handler = async event => {
-	const { Identifier, Password, FirstName, LastName } = JSON.parse(event.body)
-	// add validation
-	const hashedPassword = await bcyrpt.hash(Password, 10)
-	const params = {
-		TableName,
-		Item: {
-			Identifier,
-			Description: 'user_profile',
-			Password: hashedPassword,
-			FirstName,
-			LastName
-		}
-	}
-
+	const ResponseHandler = new Responder(corsUrl, event.httpMethod)
 	try {
-		await docClient.put(params).promise()
-		const token = await jwt.sign(
-			{
-				Identifier
-			},
-			signingKey,
-			{ expiresIn: '24h' }
-		)
-		return {
-			headers,
-			body: JSON.stringify({
-				Identifier,
-				FirstName,
-				LastName,
-				token,
-				role: 'user'
-			}),
-			statusCode: 200
-		}
+		const { emailAddress, password, userInformation } = bodyParser(event.body)
+		const hashedPassword = await bcyrpt.hash(password, numberOfSaltRounds)
+		const tokenParams = { id: emailAddress, role }
+		const [ token, user ] = await Promise.all([
+			generateToken(tokenParams),
+			putUser(emailAddress, hashedPassword, userInformation)
+		])
+		delete user.password
+		return ResponseHandler.respond({ userInformation: user, token }, 200)
 	} catch (error) {
 		console.log('error: ', error)
-		return {
-			headers,
-			body: 'error',
-			statusCode: 400
-		}
+		return ResponseHandler.respond(error.message, error.statusCode || 500)
 	}
 }
