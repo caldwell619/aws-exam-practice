@@ -10,7 +10,7 @@
 	"author": "caldwell619",
 	"license": "ISC",
 	"devDependencies": {
-		"aws-sdk": "^2.488.0"
+		"aws-sdk": "^2.624.0"
 	},
 	"dependencies": {
 		"bcrypt": "^3.0.6",

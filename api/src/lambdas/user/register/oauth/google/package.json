@@ -10,8 +10,8 @@
 	"author": "caldwell619",
 	"license": "ISC",
 	"dependencies": {
-		"google-auth-library": "^5.9.2",
+		"google-auth-library": "^5.10.0",
 		"jsonwebtoken": "^8.5.1",
-		"simple-lambda-actions": "^1.2.56"
+		"simple-lambda-actions": "^1.2.58"
 	}
 }
