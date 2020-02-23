@@ -1,10 +1,7 @@
 Transform: "AWS::Serverless-2016-10-31"
 Globals:
-  Api:
-    TracingEnabled: true
   Function:
     Runtime: nodejs10.x
-    Tracing: Active
     Timeout: 30
     Environment:
       Variables:
@@ -69,13 +66,13 @@ Resources:
             Path: /{cors+}
             Method: OPTIONS
 
-# Auth
+# Register
   LoginUser:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/lambdas/user/login
       Handler: index.handler
-      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Role: !ref LoginUserRole
       Events:
         TestSetup:
           Type: Api
@@ -92,7 +89,7 @@ Resources:
       Environment:
         Variables:
           TOKEN_DURATION: !Ref TokenDuration
-      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Role: !Ref RegisterUserRole
       Events:
         TestSetup:
           Type: Api
@@ -109,7 +106,7 @@ Resources:
       Environment:
         Variables:
           TOKEN_DURATION: !Ref TokenDuration
-      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Role: !Ref RegisterUserRole
       Events:
         TestSetup:
           Type: Api
@@ -124,7 +121,7 @@ Resources:
     Properties:
       CodeUri: src/lambdas/questions/set
       Handler: index.handler
-      Role: arn:aws:iam::867997404618:role/lambda-dynamo-xray
+      Role: !Ref DynamoSearchRole
       Events:
         TestSetup:
           Type: Api
@@ -133,7 +130,7 @@ Resources:
             Path: /question/set
             Method: get
 
-  # API
+######## API #########
   ExamTipsAPI:
     Type: AWS::Serverless::Api
     Properties:
@@ -145,11 +142,11 @@ Resources:
           Parameters:
             Location: !Sub s3://${S3Bucket}/swagger-api-template.json
 
-
+######## DB #########
   ExamTipsDb:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub Stage-${TableName}
+      TableName: !Sub ${Stage}-${TableName}
       AttributeDefinitions:
         - AttributeName: !Ref TablePartitionKey
           AttributeType: S
@@ -164,7 +161,9 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
-  LambdaActionsTestRole:
+######## Roles #########
+
+  RegisterUserRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -177,7 +176,7 @@ Resources:
             Service:
             - lambda.amazonaws.com
       Policies:
-      - PolicyName: !Sub ${Stage}-exam-tips-role
+      - PolicyName: !Sub ${Stage}-exam-tips-register-user-role
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -187,6 +186,7 @@ Resources:
             - logs:PutLogEvents
             Effect: Allow
             Resource: '*'
+					# For signing tokens
           - Action:
             - secretsmanager:GetSecretValue
             Effect: Allow
@@ -199,17 +199,79 @@ Resources:
                 - Ref: AWS::AccountId
                 - :secret/
                 - Ref: SigningKeyName
+					# For writing users
           - Action:
-            - dynamodb:GetItem
-            - dynamodb:DeleteItem
             - dynamodb:PutItem
+            Effect: Allow
+            Resource: !Ref ExamTipsDb.arn
+  
+	LoginUserRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+      Policies:
+      - PolicyName: !Sub ${Stage}-exam-tips-register-user-role
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+					# For signing tokens
+          - Action:
+            - secretsmanager:GetSecretValue
             Effect: Allow
             Resource:
               Fn::Join:
               - ''
-              - - 'arn:aws:dynamodb:'
+              - - 'arn:aws:secretsmanager:'
                 - Ref: AWS::Region
                 - ':'
                 - Ref: AWS::AccountId
-                - :table/
-                - Fn::Sub: ${Stage}-${TableName}            
+                - :secret/
+                - Ref: SigningKeyName
+					# For writing users
+          - Action:
+            - dynamodb:GetItem
+            Effect: Allow
+            Resource: !Ref ExamTipsDb.arn
+
+  DynamoSearchRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+      Policies:
+      - PolicyName: !Sub ${Stage}-exam-tips-dynamo-search-role
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - dynamodb:GetItem
+            - dynamodb:Query
+            Effect: Allow
+            Resource: !Ref ExamTipsDb.arn

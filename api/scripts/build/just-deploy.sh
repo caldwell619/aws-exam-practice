@@ -16,9 +16,17 @@ sam deploy \
   --stack-name $STAGE-iheart-challenge \
   --capabilities CAPABILITY_IAM \
   --parameter-overrides \
-    Stage=$STAGE \
-    CorsUrl=$CORS_URL \
-    S3Bucket=$S3_BUCKET
+			Stage=$STAGE \
+			CorsUrl=$CORS_URL \
+			S3Bucket=$S3_BUCKET \
+			TokenDuration=$TOKEN_DURATION \
+			TableName=$TABLE_NAME \
+			SigningKeyName=$SIGNING_KEY_NAME \
+			SecretName=$SECRET_NAME \
+			TablePartitionKey=$TABLE_PARTITION_KEY \
+			TableRangeKey=$TABLE_RANGE_KEY \
+			ApiName=$API_NAME \
+			GoogleClientId=$GOOGLE_CLIENT_ID
 
 
 if [ $? == 0 ]

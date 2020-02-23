@@ -46,6 +46,7 @@ exports.merge = async (originalFilePath, targetFilePath, writeToFilePath) => {
     const jsonToBeWritten = mergeJson(originalJson, jsonToBeMerged)
     write(jsonToBeWritten, writeToFilePath)
   } catch (error) {
-    throw new Error('error inside of merge', error)
+		console.error('error', error)
+    throw new Error('error inside of merge')
   }
 }
