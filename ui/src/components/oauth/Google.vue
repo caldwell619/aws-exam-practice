@@ -28,6 +28,13 @@ export default {
 			googleApi: null
 		}
 	},
+	created(){
+		let googleApiScript = document.createElement('script');    
+		googleApiScript.setAttribute('src','https://apis.google.com/js/client:platform.js');
+		googleApiScript.setAttribute('async');
+		googleApiScript.setAttribute('defer');
+		document.head.appendChild(googleApiScript);
+	},
 	async mounted(){
 		const client_id = process.env.VUE_APP_GOOGLE_OAUTH_CLIENT_ID
 		/*eslint-disable */

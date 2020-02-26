@@ -186,7 +186,7 @@ Resources:
             - logs:PutLogEvents
             Effect: Allow
             Resource: '*'
-					# For signing tokens
+          # For signing tokens
           - Action:
             - secretsmanager:GetSecretValue
             Effect: Allow
@@ -199,13 +199,13 @@ Resources:
                 - Ref: AWS::AccountId
                 - :secret/
                 - Ref: SigningKeyName
-					# For writing users
+          # For writing users
           - Action:
             - dynamodb:PutItem
             Effect: Allow
             Resource: !Ref ExamTipsDb.arn
   
-	LoginUserRole:
+  LoginUserRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -228,7 +228,7 @@ Resources:
             - logs:PutLogEvents
             Effect: Allow
             Resource: '*'
-					# For signing tokens
+          # For signing tokens
           - Action:
             - secretsmanager:GetSecretValue
             Effect: Allow
@@ -241,7 +241,7 @@ Resources:
                 - Ref: AWS::AccountId
                 - :secret/
                 - Ref: SigningKeyName
-					# For writing users
+          # For writing users
           - Action:
             - dynamodb:GetItem
             Effect: Allow

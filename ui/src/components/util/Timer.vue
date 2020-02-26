@@ -1,9 +1,7 @@
 <template lang='pug'>
-	div
-		v-row(:justify="justify")
-			v-col(cols=2 align='end') {{ minutesDisplay }}
-			v-col(cols=1) :
-			v-col(cols=2 align='start') {{ secondsDisplay }}
+	span
+		v-row
+			v-col {{ minutesDisplay }} : {{ secondsDisplay }}
 		v-row(justify='center' v-if="hasButtons")
 			v-col(cols=4 align='center')
 				v-icon(@click="emitToggleTimer") {{ buttonText }}

@@ -1,23 +1,12 @@
 <template lang='pug'>
 	v-container
-		v-row
-			v-col
-				h3.amazon-orange Timer
-				Timer(@timerToggle="shouldStart = !shouldStart" :shouldStart="shouldStart" justify='start')
-			v-col
-				h3.amazon-orange Category:
-				v-row
-					v-col
-						h4 {{ categoryTitle }}
-			v-col
-				h3.amazon-orange Progress
-				v-row
-					v-col(cols=1)
-						h4 {{ questionNumber }}
-					v-col(cols=2)
-						h4.amazon-orange.question-title of
-					v-col(cols=1)
-						h4 {{ numberOfQuestions }}
+		QuizHeader(
+			@timerToggle="shouldStart = !shouldStart" 
+			:questionNumber="questionNumber"
+			:numberOfQuestions="numberOfQuestions"
+			:domainTitle="domainTitle"
+			:shouldStart="shouldStart"
+		)
 		v-row
 			v-col(align='center')
 				h2.amazon-orange.question-title Question
@@ -42,10 +31,12 @@ import shuffle from '@/utils/shuffle'
 import { amazonOrange } from '@/data/constants'
 import questions from '@/data/testQuestions.js'
 import Timer from '@/components/util/Timer.vue'
+import QuizHeader from '@/components/quiz/Header.vue'
 export default {
 	name: 'BeginQuiz',
 	components: {
-		Timer
+		Timer,
+		QuizHeader
 	},
 	data(){
 		return {
@@ -58,7 +49,7 @@ export default {
 		}
 	},
 	created(){
-		this.question = questions[0]
+		this.question = this.$store.state.question.questionsForQuiz[0]
 	},
 	watch: {
 		questionNumber(newQuestionNumber){
@@ -72,8 +63,8 @@ export default {
 		answerSet(){
 			return shuffle([this.question.correctAnswer, ...this.question.incorrectAnswers])
 		},
-		categoryTitle(){
-			return this.question && this.question.category.text || ''
+		domainTitle(){
+			return this.question && this.question.domain.text || ''
 		}
 	},
 	mounted(){
@@ -87,7 +78,7 @@ export default {
 			this.givenAnswer = null
 			this.questionNumber++
 			
-		}
+		},
 	}
 }
 </script>

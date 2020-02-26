@@ -8,7 +8,7 @@ const aggregateQuestionsIntoBatchWriteParams = baseQuestions => {
   return baseQuestions.map(question => {
 		const domain = question.domain.value
 		const scope = question.scope.value
-		const resourceDescription = `${domain}_${scope}_${uuid()}`
+		const resourceDescription = `${scope}_${domain}_${uuid()}`
     return {
       'PutRequest': {
 				'Item': DynamoDB.Converter.marshall({

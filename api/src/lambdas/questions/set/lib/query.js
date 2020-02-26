@@ -5,7 +5,10 @@ const rangeKeyName = process.env.TABLE_RANGE_KEY
 
 const queryTable = (domain, scope) => {
 	const partitionKeySearchTerm = '#QUESTION'
-	const rangeKeySearchTerm = `${domain}_${scope}`
+	let rangeKeySearchTerm = domain
+	if(scope !== 'any'){
+		rangeKeySearchTerm = rangeKeySearchTerm + `_${scope}`
+	}
 	const params = {
 		TableName,
 		partitionKeyName,

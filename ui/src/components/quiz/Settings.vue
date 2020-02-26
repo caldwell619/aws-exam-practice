@@ -6,20 +6,21 @@
 		v-row(justify='center')
 			v-col(align='center')
 				v-autocomplete(
-					v-model="chosenDomain"
-					:items="questionDomains"
-					label='Domain'
-					:color="amazonOrange"
-					outlined
-				)
-		v-row(justify='center')
-			v-col(align='center' )
-				v-autocomplete(
 					v-model="chosenScope"
 					:items="questionScopes"
 					label='Scope'
 					:color="amazonOrange"
 					outlined
+				)
+		v-row(justify='center')
+			v-col(align='center')
+				v-autocomplete(
+					v-model="chosenDomain"
+					:items="questionDomains"
+					label='Domain'
+					:color="amazonOrange"
+					outlined
+					:disabled="chosenScope === null"
 				)
 		v-row(justify='center')
 			v-col(align='center' )
@@ -32,16 +33,20 @@
 				)
 		v-row.action-container(justify='center')
 			v-col(align='center' cols='5')
-				h3.link-container.flex-centered(@click="requestQuestions") Start
+				BoxButton(:isLoading="isLoading" buttonText="Start" @buttonClicked="requestQuestions")
 				
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import BoxButton from '@/components/util/BoxButton.vue'
 import { questionScopes, questionDomains, amazonOrange } from '@/data/constants'
 const anyOption = { text: 'Any', value: 'any'}
 export default {
 	name: 'Splash',
+	components: {
+		BoxButton
+	},
 	data(){
 		return {
 			amazonOrange,
@@ -50,14 +55,11 @@ export default {
 			isLoading: false,
 			numberOfQuestions: null,
 			questionScopes,
-			questionDomains: [...questionDomains, anyOption]
+			questionDomains: [anyOption, ...questionDomains]
 		}
 	},
 	methods: {
 		...mapActions('question', ['fetchQuestions']),
-		beginQuiz(){
-			this.$router.push('/user/quiz/begin')
-		},
 		async requestQuestions(){
 			this.isLoading = true
 			const questionParams = {
@@ -67,7 +69,7 @@ export default {
 			}
 			try {
 				await this.fetchQuestions(questionParams)
-				this.beginQuiz()
+				this.$router.push('/user/quiz/begin')
 			} catch(error){
 				console.error('error', error)
 				this.isLoading = false
