@@ -42,6 +42,11 @@ const routes = [
     },
     children: [
 			{
+				path: 'profile',
+				name: 'UserProfile',
+				component: () => import('@/views/authenticated/profile/Profile.vue'),
+			},
+			{
 				path: 'home',
 				name: 'UserHome',
 				component: () => import('@/views/authenticated/Home.vue'),

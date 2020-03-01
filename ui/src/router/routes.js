@@ -44,6 +44,19 @@ export const authenticatedRoutes = [
     path: '/user/quiz/settings',
     icon: 'mdi-help',
     title: 'Practice',
+  },
+	{
+    path: '/user/flash-cards/settings',
+    icon: 'mdi-help',
+    title: 'Flash Cards',
+  },
+	{
+    divider: true
+  },
+	{
+    path: '/user/profile',
+    icon: 'mdi-person',
+    title: 'Profile',
   }
 ]
 
