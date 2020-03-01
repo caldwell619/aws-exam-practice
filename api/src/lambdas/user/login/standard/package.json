@@ -1,0 +1,12 @@
+{
+	"name": "standard-login",
+	"version": "1.0.0",
+	"description": "Email / password logging in to the application",
+	"main": "index.js",
+	"author": "caldwell619",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^3.0.6",
+		"jsonwebtoken": "^8.5.1"
+	}
+}
