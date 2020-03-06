@@ -55,7 +55,7 @@ export const authenticatedRoutes = [
   },
 	{
     path: '/user/profile',
-    icon: 'mdi-person',
+    icon: 'mdi-account',
     title: 'Profile',
   }
 ]
