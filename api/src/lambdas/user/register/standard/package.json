@@ -13,7 +13,7 @@
 		"aws-sdk": "^2.624.0"
 	},
 	"dependencies": {
-		"bcrypt": "^3.0.6",
+		"bcrypt": "^5.0.0",
 		"jsonwebtoken": "^8.5.1",
 		"simple-lambda-actions": "^1.2.58"
 	}
