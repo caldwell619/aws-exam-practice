@@ -21,7 +21,7 @@
 	"author": "caldwell619",
 	"license": "ISC",
 	"devDependencies": {
-		"aws-sdk": "^2.623.0",
+		"aws-sdk": "^2.814.0",
 		"babel-eslint": "^10.0.2",
 		"babel-jest": "^24.8.0",
 		"concurrently": "^5.1.0",
