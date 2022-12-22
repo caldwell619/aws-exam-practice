@@ -11,7 +11,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"google-auth-library": "^5.10.0",
-		"jsonwebtoken": "^8.5.1",
+		"jsonwebtoken": "^9.0.0",
 		"simple-lambda-actions": "^1.2.58"
 	}
 }
